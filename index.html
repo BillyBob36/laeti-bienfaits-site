@@ -8,17 +8,17 @@
 <link rel="preload" href="img/construction-bg.jpg?v=2" as="image">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     color:#fff;
     background:#2b3a26 url('img/construction-bg.jpg?v=2') center/cover no-repeat fixed;
     min-height:100dvh;
-    display:grid;
-    place-items:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
     padding:24px;
     position:relative;
-    overflow:hidden;
   }
   body::before{
     content:'';position:absolute;inset:0;
@@ -106,18 +106,30 @@
     color:rgba(255,255,255,.65);
   }
   .foot{
-    position:absolute;
-    bottom:18px;left:50%;transform:translateX(-50%);
-    font-size:12px;
-    color:rgba(255,255,255,.55);
-    letter-spacing:.06em;
+    position:relative;
     z-index:1;
-    white-space:nowrap;
+    margin-top:22px;
+    font-size:12px;
+    color:rgba(255,255,255,.65);
+    letter-spacing:.06em;
+    text-align:center;
   }
   @media(max-width:540px){
-    .card{padding:36px 22px;}
-    body{padding:16px;}
-    .foot{font-size:11px;}
+    .card{padding:32px 22px;}
+    body{padding:18px;}
+    .foot{font-size:11px;margin-top:18px;}
+    h1{font-size:clamp(26px,7vw,32px);}
+    p.lead{font-size:15px;margin-bottom:24px;}
+    .eyebrow{margin-bottom:18px;}
+    .logo{width:62px;height:62px;margin-bottom:16px;}
+  }
+  @media(max-height:760px){
+    .card{padding:30px 30px;}
+    .logo{width:58px;height:58px;margin-bottom:14px;}
+    .eyebrow{margin-bottom:16px;padding:5px 14px;font-size:11px;}
+    h1{font-size:clamp(24px,3vw,32px);margin-bottom:10px;}
+    p.lead{font-size:15px;margin-bottom:22px;line-height:1.5;}
+    .hint{margin-top:18px;}
   }
 </style>
 </head>
