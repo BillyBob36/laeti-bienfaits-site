@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -316 318 632" fill="none" stroke="#aecb7f" stroke-width="2.4">
+  <defs>
+    <clipPath id="half"><rect x="0" y="-316" width="320" height="632"/></clipPath>
+  </defs>
+  <g clip-path="url(#half)">
+    <!-- anneau central + 1re couronne (6) + 2e couronne (12) = 19 cercles, rayon 100 -->
+    <circle cx="0" cy="0" r="100"/>
+    <circle cx="100" cy="0" r="100"/>
+    <circle cx="-100" cy="0" r="100"/>
+    <circle cx="50" cy="86.60" r="100"/>
+    <circle cx="-50" cy="86.60" r="100"/>
+    <circle cx="50" cy="-86.60" r="100"/>
+    <circle cx="-50" cy="-86.60" r="100"/>
+    <circle cx="150" cy="86.60" r="100"/>
+    <circle cx="-150" cy="86.60" r="100"/>
+    <circle cx="150" cy="-86.60" r="100"/>
+    <circle cx="-150" cy="-86.60" r="100"/>
+    <circle cx="0" cy="173.21" r="100"/>
+    <circle cx="0" cy="-173.21" r="100"/>
+    <circle cx="200" cy="0" r="100"/>
+    <circle cx="-200" cy="0" r="100"/>
+    <circle cx="100" cy="173.21" r="100"/>
+    <circle cx="-100" cy="173.21" r="100"/>
+    <circle cx="100" cy="-173.21" r="100"/>
+    <circle cx="-100" cy="-173.21" r="100"/>
+    <!-- double anneau de bordure -->
+    <circle cx="0" cy="0" r="300"/>
+    <circle cx="0" cy="0" r="314"/>
+  </g>
+</svg>
