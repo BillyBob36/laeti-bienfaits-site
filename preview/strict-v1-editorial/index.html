@@ -597,7 +597,7 @@ image-slot{touch-action:auto;}
     <div class="lb-foot" style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;">
       <div>
         <a href="#accueil" style="display:flex;align-items:center;gap:13px;">
-          <img src="img/logo7.png" alt="" style="width:56px;height:56px;object-fit:contain;flex:none;">
+          <img class="lb-logo" src="img/logo7.png" alt="" style="width:56px;height:56px;object-fit:contain;flex:none;">
           <span style="line-height:1.05;"><span style="font-family:'Playfair Display',Georgia,serif;font-size:23px;font-weight:600;color:#fff;">Laëti'<span style="color:#e8c9b8;">Bienfaits</span></span><br><span style="font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#a9c2a3;font-weight:600;">Naturopathie · Kinésiologie</span></span>
         </a>
         <p style="margin-top:18px;max-width:36ch;font-size:16px;line-height:1.7;color:rgba(255,255,255,.74);">Laëtitia Ehles — naturopathe référencée à l'OMNES, formée en kinésiologie instinctive. Accompagnement des enfants, adolescents et adultes.</p>
@@ -654,12 +654,6 @@ image-slot{touch-action:auto;}
   <img class="lb-lb-img" id="lb-lb-img" src="" alt="">
   <button class="lb-lb-btn lb-lb-next" type="button" aria-label="Image suivante"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
   <div class="lb-lb-count" id="lb-lb-count"></div>
-</div>
-
-<!-- ⚙️ TEMPORAIRE — sélecteur de logo (à retirer après validation du logo) -->
-<div id="lb-logo-badge" style="position:fixed;bottom:16px;left:16px;z-index:1200;background:rgba(43,58,38,.96);color:#fff;padding:8px 13px;border-radius:11px;font:600 12px/1.35 system-ui,-apple-system,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.32);display:flex;align-items:center;gap:9px;max-width:260px;">
-  <span style="font-size:16px;line-height:1;">🔄</span>
-  <span>Logo affiché : <b id="lb-logo-name">logo7</b><br><span style="font-weight:400;opacity:.82;font-size:11px;">Cliquez le logo du header pour comparer</span></span>
 </div>
 
 </div>
@@ -944,19 +938,18 @@ class Component extends DCLogic {
 <!-- ⚙️ TEMPORAIRE — défilement des logos au clic du header (à retirer après validation) -->
 <script>
 (function(){
-  var logos  = ['img/logo7.png','img/logo1.png','img/logo2.png','img/logo3.png','img/logo4.png','img/logo5.png','img/logo6.png','img/logo-laeti.png'];
-  var labels = ['logo7','logo1','logo2','logo3','logo4','logo5','logo6','actuel'];
-  var img = document.querySelector('.lb-logo');
-  var nameEl = document.getElementById('lb-logo-name');
-  if (!img) return;
+  var logos = ['img/logo7.png','img/logo1.png','img/logo2.png','img/logo3.png','img/logo4.png','img/logo5.png','img/logo6.png','img/logo-laeti.png'];
+  var imgs = document.querySelectorAll('.lb-logo');          // header + footer (synchronisés)
+  var trigger = document.querySelector('header .lb-logo');   // le clic se fait sur le logo du header
+  if (!imgs.length || !trigger) return;
   var i = 0;
-  img.style.cursor = 'pointer';
-  img.setAttribute('title', 'Cliquez pour changer de logo');
-  img.addEventListener('click', function(e){
+  function apply(){ for (var k = 0; k < imgs.length; k++) imgs[k].src = logos[i]; }
+  trigger.style.cursor = 'pointer';
+  trigger.setAttribute('title', 'Cliquez pour changer de logo');
+  trigger.addEventListener('click', function(e){
     e.preventDefault(); e.stopPropagation();
     i = (i + 1) % logos.length;
-    img.src = logos[i];
-    if (nameEl) nameEl.textContent = labels[i];
+    apply();
   });
 })();
 </script>
