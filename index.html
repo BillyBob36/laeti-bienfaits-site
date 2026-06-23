@@ -38,12 +38,14 @@
     box-shadow:0 30px 80px -20px rgba(0,0,0,.4);
   }
   .logo{
-    width:72px;height:72px;border-radius:50%;
-    background:#7a9b76;color:#fff;
+    width:96px;height:96px;border-radius:50%;
+    background:#f7f3ed;
     display:grid;place-items:center;
-    margin:0 auto 22px;
-    box-shadow:0 12px 30px -10px rgba(0,0,0,.4);
+    margin:0 auto 20px;
+    box-shadow:0 12px 30px -10px rgba(0,0,0,.45);
+    cursor:pointer;overflow:hidden;
   }
+  .logo img{width:76px;height:76px;object-fit:contain;display:block;}
   h1{
     font-family:'Playfair Display',Georgia,serif;
     font-weight:500;font-style:italic;
@@ -136,11 +138,8 @@
 <body>
 
 <div class="card">
-  <div class="logo">
-    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-      <path d="M2 21c0-3 1.85-5.36 5.08-6"></path>
-    </svg>
+  <div class="logo" id="cstr-logo" title="Cliquez pour changer de logo">
+    <img id="cstr-logo-img" src="img/logo7.png" alt="Laëti'Bienfaits">
   </div>
 
   <span class="eyebrow">Site en construction</span>
@@ -202,6 +201,28 @@
   if (document.cookie.indexOf('lb_access=1') !== -1) {
     window.location.href = PREVIEW_URL;
   }
+})();
+</script>
+
+<!-- ⚙️ TEMPORAIRE — sélecteur de logo (à retirer après validation) -->
+<div id="cstr-logo-badge" style="position:fixed;bottom:16px;left:16px;z-index:50;background:rgba(43,58,38,.96);color:#fff;padding:8px 13px;border-radius:11px;font:600 12px/1.35 system-ui,-apple-system,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.32);display:flex;align-items:center;gap:9px;max-width:260px;">
+  <span style="font-size:16px;line-height:1;">🔄</span>
+  <span>Logo affiché : <b id="cstr-logo-name">logo7</b><br><span style="font-weight:400;opacity:.82;font-size:11px;">Cliquez le logo pour comparer</span></span>
+</div>
+<script>
+(function(){
+  var logos  = ['img/logo7.png','img/logo1.png','img/logo2.png','img/logo3.png','img/logo4.png','img/logo5.png','img/logo6.png','img/logo-laeti.png'];
+  var labels = ['logo7','logo1','logo2','logo3','logo4','logo5','logo6','actuel'];
+  var box = document.getElementById('cstr-logo');
+  var img = document.getElementById('cstr-logo-img');
+  var nameEl = document.getElementById('cstr-logo-name');
+  if (!box || !img) return;
+  var i = 0;
+  box.addEventListener('click', function(){
+    i = (i + 1) % logos.length;
+    img.src = logos[i];
+    if (nameEl) nameEl.textContent = labels[i];
+  });
 })();
 </script>
 
