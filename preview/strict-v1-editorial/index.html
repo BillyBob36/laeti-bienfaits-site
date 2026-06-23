@@ -656,6 +656,12 @@ image-slot{touch-action:auto;}
   <div class="lb-lb-count" id="lb-lb-count"></div>
 </div>
 
+<!-- ⚙️ TEMPORAIRE — sélecteur de logo (à retirer après validation du logo) -->
+<div id="lb-logo-badge" style="position:fixed;bottom:16px;left:16px;z-index:1200;background:rgba(43,58,38,.96);color:#fff;padding:8px 13px;border-radius:11px;font:600 12px/1.35 system-ui,-apple-system,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.32);display:flex;align-items:center;gap:9px;max-width:260px;">
+  <span style="font-size:16px;line-height:1;">🔄</span>
+  <span>Logo affiché : <b id="lb-logo-name">actuel</b><br><span style="font-weight:400;opacity:.82;font-size:11px;">Cliquez le logo du header pour comparer</span></span>
+</div>
+
 </div>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
@@ -933,6 +939,25 @@ class Component extends DCLogic {
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { if (dx < 0) nextLB(); else prevLB(); }
     }, { passive: true });
   }
+})();
+</script>
+<!-- ⚙️ TEMPORAIRE — défilement des logos au clic du header (à retirer après validation) -->
+<script>
+(function(){
+  var logos  = ['img/logo-laeti.png','img/logo1.png','img/logo2.png','img/logo3.png','img/logo4.png','img/logo5.png','img/logo6.png'];
+  var labels = ['actuel','logo1','logo2','logo3','logo4','logo5','logo6'];
+  var img = document.querySelector('.lb-logo');
+  var nameEl = document.getElementById('lb-logo-name');
+  if (!img) return;
+  var i = 0;
+  img.style.cursor = 'pointer';
+  img.setAttribute('title', 'Cliquez pour changer de logo');
+  img.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    i = (i + 1) % logos.length;
+    img.src = logos[i];
+    if (nameEl) nameEl.textContent = labels[i];
+  });
 })();
 </script>
 </body>
