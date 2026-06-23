@@ -47,6 +47,8 @@ section[id]{scroll-margin-top:0;}
   .lb-btn{padding:13px 16px!important;}
   /* Galerie : 2 images par ligne sur mobile */
   .lb-galgrid{grid-template-columns:1fr 1fr!important;}
+  /* Déco "Pourquoi consulter" : 2-3× plus grande sur mobile uniquement */
+  .lb-deco-pourquoi{width:620px!important;max-width:none!important;left:-210px!important;}
   /* Carrousels : pratiques + tarifs deviennent défilables au doigt */
   .lb-carousel{display:flex!important;grid-template-columns:none!important;overflow-x:auto;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:14px!important;
@@ -76,7 +78,12 @@ image-slot{touch-action:auto;}
 .lb-modal-bg{position:absolute;inset:0;background:rgba(20,28,16,.62);backdrop-filter:blur(3px);}
 .lb-modal-box{position:relative;z-index:1;background:#f7f3ed;width:100%;max-width:650px;max-height:88vh;overflow-y:auto;
   -webkit-overflow-scrolling:touch;border-radius:24px;box-shadow:0 30px 80px -20px rgba(0,0,0,.55);
-  animation:lbModalIn .35s cubic-bezier(.22,.61,.36,1);}
+  animation:lbModalIn .35s cubic-bezier(.22,.61,.36,1);
+  scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.28) transparent;}
+.lb-modal-box::-webkit-scrollbar{width:6px;}
+.lb-modal-box::-webkit-scrollbar-track{background:transparent;}
+.lb-modal-box::-webkit-scrollbar-thumb{background:rgba(122,155,118,.28);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+.lb-modal-box::-webkit-scrollbar-thumb:hover{background:rgba(122,155,118,.45);background-clip:padding-box;}
 @keyframes lbModalIn{from{opacity:0;transform:translateY(26px) scale(.98);}to{opacity:1;transform:none;}}
 .lb-modal-hd{position:relative;padding:34px 36px 0;}
 .lb-modal-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;
@@ -92,8 +99,12 @@ image-slot{touch-action:auto;}
 .lb-modal-bd p{margin:0 0 12px;}
 .lb-modal-bd .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px;}
 .lb-modal-bd .chips span{background:#eef4ea;border:1px solid #a9c2a3;color:#2b3a26;font-weight:600;font-size:13.5px;padding:6px 13px;border-radius:999px;}
-.lb-modal-cta{display:inline-flex;align-items:center;gap:9px;margin-top:18px;font-weight:700;font-size:16px;cursor:pointer;
-  padding:14px 30px;border-radius:999px;background:#c47a5b;color:#fff;box-shadow:0 10px 26px -12px rgba(168,98,63,.8);}
+.lb-modal-cta{display:flex;align-items:center;justify-content:center;gap:9px;margin:24px auto 6px;width:fit-content;
+  font-family:inherit;font-weight:700;font-size:17px;cursor:pointer;border:0;outline:none;-webkit-appearance:none;appearance:none;
+  padding:16px 36px;border-radius:999px;background:#c47a5b;color:#fff;box-shadow:0 10px 26px -12px rgba(168,98,63,.8);
+  transition:transform .18s cubic-bezier(.22,.61,.36,1),background .2s;}
+.lb-modal-cta:hover{transform:translateY(-2px);background:#b66a4d;}
+.lb-modal-cta:active{transform:translateY(0) scale(.98);}
 .lb-prac{cursor:pointer;}
 @media(max-width:540px){
   .lb-modal{padding:0;align-items:flex-end;}
@@ -249,7 +260,7 @@ image-slot{touch-action:auto;}
 
 <!-- ===================== POURQUOI CONSULTER ===================== -->
 <section class="lb-sec" style="padding:96px 0;background:#eef4ea;position:relative;overflow:hidden;">
-  <img src="img/mandala.svg" alt="" aria-hidden="true" style="position:absolute;left:-120px;top:50%;transform:translateY(-50%);width:620px;height:auto;max-width:55vw;opacity:.35;pointer-events:none;z-index:0;">
+  <img class="lb-deco-pourquoi" src="img/mandala.svg" alt="" aria-hidden="true" style="position:absolute;left:-120px;top:50%;transform:translateY(-50%);width:620px;height:auto;max-width:55vw;opacity:.35;pointer-events:none;z-index:0;">
   <div style="max-width:1180px;margin:0 auto;padding:0 28px;position:relative;z-index:1;">
     <div class="lb-2col" style="display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:start;">
       <div>
