@@ -136,6 +136,29 @@ image-slot{touch-action:auto;}
   .lb-modal-hd{padding:28px 22px 0;}
   .lb-modal-bd{padding:14px 22px 28px;}
 }
+
+/* === LIGHTBOX galerie (plein écran + flèches sobres) === */
+.lb-gal{cursor:pointer;}
+.lb-lightbox{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;
+  background:rgba(18,25,15,.93);backdrop-filter:blur(4px);animation:lbFade .25s ease;}
+.lb-lightbox.open{display:flex;}
+@keyframes lbFade{from{opacity:0;}to{opacity:1;}}
+.lb-lb-img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:8px;
+  box-shadow:0 20px 70px rgba(0,0,0,.55);user-select:none;-webkit-user-drag:none;}
+.lb-lb-btn,.lb-lb-close{position:absolute;border:0;cursor:pointer;color:#fff;display:grid;place-items:center;
+  background:rgba(255,255,255,.13);backdrop-filter:blur(4px);transition:background .2s;}
+.lb-lb-btn:hover,.lb-lb-close:hover{background:rgba(255,255,255,.27);}
+.lb-lb-btn{top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;}
+.lb-lb-prev{left:20px;} .lb-lb-next{right:20px;}
+.lb-lb-close{top:20px;right:20px;width:46px;height:46px;border-radius:50%;}
+.lb-lb-count{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.9);
+  font-size:13.5px;font-weight:600;letter-spacing:.06em;background:rgba(0,0,0,.3);padding:6px 15px;border-radius:999px;}
+@media(max-width:640px){
+  .lb-lb-btn{width:44px;height:44px;}
+  .lb-lb-prev{left:8px;} .lb-lb-next{right:8px;}
+  .lb-lb-close{top:12px;right:12px;width:42px;height:42px;}
+  .lb-lb-img{max-width:94vw;max-height:80vh;}
+}
 </style>
 <script src="image-slot.js"></script>
 
@@ -624,6 +647,15 @@ image-slot{touch-action:auto;}
   </div>
 </div>
 
+<!-- ===================== LIGHTBOX GALERIE ===================== -->
+<div class="lb-lightbox" id="lb-lightbox" role="dialog" aria-modal="true" aria-label="Galerie photo">
+  <button class="lb-lb-close" type="button" aria-label="Fermer" data-lbclose><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+  <button class="lb-lb-btn lb-lb-prev" type="button" aria-label="Image précédente"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+  <img class="lb-lb-img" id="lb-lb-img" src="" alt="">
+  <button class="lb-lb-btn lb-lb-next" type="button" aria-label="Image suivante"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+  <div class="lb-lb-count" id="lb-lb-count"></div>
+</div>
+
 </div>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
@@ -859,6 +891,47 @@ class Component extends DCLogic {
       }
     });
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+  }
+
+  // === LIGHTBOX galerie : plein écran + flèches + clavier + swipe ===
+  var galSlots = document.querySelectorAll('#galerie .lb-gal');
+  var lb = document.getElementById('lb-lightbox');
+  if (galSlots.length && lb) {
+    var lbImg = document.getElementById('lb-lb-img');
+    var lbCount = document.getElementById('lb-lb-count');
+    var srcs = [];
+    for (var g = 0; g < galSlots.length; g++) {
+      srcs.push(galSlots[g].getAttribute('src'));
+      (function(i){ galSlots[i].addEventListener('click', function(){ openLB(i); }); })(g);
+    }
+    var lbIdx = 0, nsrc = srcs.length;
+    function showLB(){ lbImg.src = srcs[lbIdx]; lbCount.textContent = (lbIdx + 1) + ' / ' + nsrc; }
+    function openLB(i){ lbIdx = i; showLB(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeLB(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+    function nextLB(){ lbIdx = (lbIdx + 1) % nsrc; showLB(); }
+    function prevLB(){ lbIdx = (lbIdx - 1 + nsrc) % nsrc; showLB(); }
+    lb.querySelector('.lb-lb-next').addEventListener('click', function(e){ e.stopPropagation(); nextLB(); });
+    lb.querySelector('.lb-lb-prev').addEventListener('click', function(e){ e.stopPropagation(); prevLB(); });
+    lb.addEventListener('click', function(e){
+      if (e.target.closest('[data-lbclose]')) { closeLB(); return; }
+      if (e.target === lb) closeLB();
+    });
+    document.addEventListener('keydown', function(e){
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLB();
+      else if (e.key === 'ArrowRight') nextLB();
+      else if (e.key === 'ArrowLeft') prevLB();
+    });
+    var lsx = 0, lsy = 0, lsw = false;
+    lb.addEventListener('touchstart', function(e){
+      if (e.touches.length !== 1) { lsw = false; return; }
+      lsx = e.touches[0].clientX; lsy = e.touches[0].clientY; lsw = true;
+    }, { passive: true });
+    lb.addEventListener('touchend', function(e){
+      if (!lsw) return; lsw = false;
+      var t = e.changedTouches[0], dx = t.clientX - lsx, dy = t.clientY - lsy;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { if (dx < 0) nextLB(); else prevLB(); }
+    }, { passive: true });
   }
 })();
 </script>
