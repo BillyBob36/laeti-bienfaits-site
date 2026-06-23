@@ -52,10 +52,10 @@ section[id]{scroll-margin-top:0;}
   /* Carrousels : pratiques + tarifs deviennent défilables au doigt */
   .lb-carousel{display:flex!important;grid-template-columns:none!important;overflow-x:auto;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:14px!important;
-    padding-bottom:6px;scrollbar-width:none;touch-action:pan-x;}
+    padding-bottom:6px;scrollbar-width:none;touch-action:pan-x;align-items:stretch!important;}
   .lb-carousel::-webkit-scrollbar{display:none;}
-  .lb-carousel>*{flex:0 0 80%!important;scroll-snap-align:center;}
-  .lb-carnav{display:flex!important;}
+  .lb-carousel>*{flex:0 0 100%!important;scroll-snap-align:start;height:auto!important;}
+  .lb-dots{display:flex!important;}
 }
 .lb-mobile-nav.open{display:flex!important;}
 .lb-mlink:active,.lb-mlink:hover{background:rgba(122,155,118,.12);}
@@ -64,13 +64,14 @@ section[id]{scroll-margin-top:0;}
 image-slot::part(image){touch-action:auto!important;}
 image-slot{touch-action:auto;}
 
-/* === Carrousels : flèches très visibles (mobile uniquement) === */
-.lb-carnav{display:none;align-items:center;justify-content:center;gap:18px;margin-top:20px;}
-.lb-carbtn{width:52px;height:52px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;flex:none;
-  background:#c47a5b;color:#fff;box-shadow:0 10px 22px -8px rgba(168,98,63,.85);transition:transform .15s,filter .15s;}
-.lb-carbtn:active{transform:scale(.9);}
-.lb-carhint{font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5f7d5c;text-align:center;min-width:128px;}
-.lb-carnav-dark .lb-carhint{color:#a9c2a3;}
+/* === Diapo Pratiques/Tarifs : points sous le slider (mobile), comme le hero === */
+.lb-dots{display:none;justify-content:center;gap:10px;margin-top:24px;}
+.lb-dot{width:11px;height:11px;border-radius:99px;border:0;padding:0;cursor:pointer;
+  transition:width .28s cubic-bezier(.22,.61,.36,1),background .28s;}
+.lb-dots-dark .lb-dot{background:rgba(255,255,255,.42);}
+.lb-dots-dark .lb-dot.on{background:#ffffff;width:30px;}
+.lb-dots-light .lb-dot{background:rgba(122,155,118,.4);}
+.lb-dots-light .lb-dot.on{background:#c47a5b;width:30px;}
 
 /* === MODAL pratiques === */
 .lb-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
@@ -356,11 +357,7 @@ image-slot{touch-action:auto;}
         </div>
       </article>
     </div>
-    <div class="lb-carnav lb-carnav-dark">
-      <button class="lb-carbtn lb-carprev" type="button" aria-label="Pratique précédente"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
-      <span class="lb-carhint">‹ Glissez ›</span>
-      <button class="lb-carbtn lb-carnext" type="button" aria-label="Pratique suivante"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
-    </div>
+    <div class="lb-dots lb-dots-dark" aria-label="Navigation des pratiques"></div>
     </div>
   </div>
 </section>
@@ -398,11 +395,7 @@ image-slot{touch-action:auto;}
         </ul>
       </div>
     </div>
-    <div class="lb-carnav">
-      <button class="lb-carbtn lb-carprev" type="button" aria-label="Tarif précédent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
-      <span class="lb-carhint">‹ Glissez ›</span>
-      <button class="lb-carbtn lb-carnext" type="button" aria-label="Tarif suivant"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
-    </div>
+    <div class="lb-dots lb-dots-light" aria-label="Navigation des tarifs"></div>
     </div>
     <p style="text-align:center;margin:36px auto 0;color:#6f7c69;font-size:16px;max-width:820px;">Les prestations ne sont pas remboursées par la Sécurité Sociale, mais renseignez-vous auprès de votre mutuelle. Certaines d'entre elles prennent en charge le remboursement des soins. — Carte cadeau possible.</p>
     <div style="text-align:center;margin-top:30px;">
@@ -739,20 +732,46 @@ class Component extends DCLogic {
     });
   });
 
-  // === CARROUSELS (mobile) : flèches gauche/droite ===
+  // === DIAPO Pratiques/Tarifs (mobile) : points synchronisés + glisser tactile natif ===
   document.querySelectorAll('.lb-carwrap').forEach(function(wrap){
     var car = wrap.querySelector('.lb-carousel');
-    var nav = wrap.querySelector('.lb-carnav');
-    if (!car || !nav) return;
-    function step(dir){
-      var card = car.children[0];
-      var w = card ? card.getBoundingClientRect().width + 14 : car.clientWidth * 0.82;
-      car.scrollBy({ left: dir * w, behavior: 'smooth' });
+    var dotsBox = wrap.querySelector('.lb-dots');
+    if (!car || !dotsBox || !car.children.length) return;
+    var cards = car.children, nb = cards.length;
+    function cw(){ return cards[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(car).columnGap) || 0); }
+    for (var i = 0; i < nb; i++) {
+      (function(i){
+        var b = document.createElement('button');
+        b.className = 'lb-dot'; b.type = 'button';
+        b.setAttribute('aria-label', 'Aller à l’élément ' + (i + 1));
+        b.addEventListener('click', function(){ car.scrollTo({ left: i * cw(), behavior: 'smooth' }); });
+        dotsBox.appendChild(b);
+      })(i);
     }
-    var p = nav.querySelector('.lb-carprev'), n = nav.querySelector('.lb-carnext');
-    if (p) p.addEventListener('click', function(){ step(-1); });
-    if (n) n.addEventListener('click', function(){ step(1); });
+    var dots = dotsBox.children, raf = null;
+    function upd(){
+      var idx = Math.round(car.scrollLeft / cw());
+      idx = Math.max(0, Math.min(nb - 1, idx));
+      for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('on', j === idx);
+    }
+    car.addEventListener('scroll', function(){ if (raf) return; raf = requestAnimationFrame(function(){ raf = null; upd(); }); });
+    upd();
   });
+
+  // === GLISSER tactile sur le HERO (swipe gauche/droite) ===
+  var heroSec = document.getElementById('accueil');
+  if (heroSec && total > 0) {
+    var hsx = 0, hsy = 0, hsw = false;
+    heroSec.addEventListener('touchstart', function(e){
+      if (e.touches.length !== 1) { hsw = false; return; }
+      hsx = e.touches[0].clientX; hsy = e.touches[0].clientY; hsw = true;
+    }, { passive: true });
+    heroSec.addEventListener('touchend', function(e){
+      if (!hsw) return; hsw = false;
+      var t = e.changedTouches[0], dx = t.clientX - hsx, dy = t.clientY - hsy;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) { if (dx < 0) next(); else prev(); }
+    }, { passive: true });
+  }
 
   // === MODAL PRATIQUES (contenu intégral de Laeti) ===
   var PRAC = [
