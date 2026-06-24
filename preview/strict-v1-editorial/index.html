@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" href="img/logo-laeti.png">
-<link rel="apple-touch-icon" href="img/logo-laeti.png">
+<link rel="icon" type="image/png" href="img/logo7.png">
+<link rel="apple-touch-icon" href="img/logo7.png">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -52,7 +52,7 @@ section[id]{scroll-margin-top:0;}
   /* Carrousels : pratiques + tarifs deviennent défilables au doigt */
   .lb-carousel{display:flex!important;grid-template-columns:none!important;overflow-x:auto;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:14px!important;
-    padding-bottom:6px;scrollbar-width:none;touch-action:pan-x;align-items:stretch!important;}
+    padding-bottom:6px;scrollbar-width:none;align-items:stretch!important;}
   .lb-carousel::-webkit-scrollbar{display:none;}
   .lb-carousel>*{flex:0 0 100%!important;scroll-snap-align:start;height:auto!important;}
   .lb-dots{display:flex!important;}
@@ -179,6 +179,7 @@ image-slot{touch-action:auto;}
       <a class="lb-link" href="#qui-suis-je" style="padding:10px 16px;border-radius:999px;font-weight:600;font-size:16px;color:#2b3a26;">Qui suis-je</a>
       <a class="lb-link" href="#pratiques" style="padding:10px 16px;border-radius:999px;font-weight:600;font-size:16px;color:#2b3a26;">Pratiques</a>
       <a class="lb-link" href="#tarifs" style="padding:10px 16px;border-radius:999px;font-weight:600;font-size:16px;color:#2b3a26;">Tarifs</a>
+      <a class="lb-link" href="#galerie" style="padding:10px 16px;border-radius:999px;font-weight:600;font-size:16px;color:#2b3a26;">Galerie</a>
       <a class="lb-link" href="#contact" style="padding:10px 16px;border-radius:999px;font-weight:600;font-size:16px;color:#2b3a26;">Contact</a>
     </nav>
     <a class="lb-btn" href="#contact" style="display:inline-flex;align-items:center;gap:10px;flex:none;white-space:nowrap;font-weight:700;font-size:16px;padding:13px 24px;border-radius:999px;background:#c47a5b;color:#fff;box-shadow:0 10px 26px -12px rgba(168,98,63,.8);">
@@ -194,6 +195,7 @@ image-slot{touch-action:auto;}
     <a class="lb-mlink" href="#qui-suis-je" style="padding:14px 16px;border-radius:12px;font-weight:600;color:#2b3a26;text-decoration:none;">Qui suis-je</a>
     <a class="lb-mlink" href="#pratiques" style="padding:14px 16px;border-radius:12px;font-weight:600;color:#2b3a26;text-decoration:none;">Pratiques</a>
     <a class="lb-mlink" href="#tarifs" style="padding:14px 16px;border-radius:12px;font-weight:600;color:#2b3a26;text-decoration:none;">Tarifs</a>
+    <a class="lb-mlink" href="#galerie" style="padding:14px 16px;border-radius:12px;font-weight:600;color:#2b3a26;text-decoration:none;">Galerie</a>
     <a class="lb-mlink" href="#contact" style="padding:14px 16px;border-radius:12px;font-weight:600;color:#2b3a26;text-decoration:none;">Contact</a>
   </nav>
 </header>
@@ -283,7 +285,7 @@ image-slot{touch-action:auto;}
   <div style="max-width:1180px;margin:0 auto;padding:0 28px;">
     <div class="lb-2col" style="display:grid;grid-template-columns:0.85fr 1.15fr;gap:64px;align-items:center;">
       <div style="position:relative;">
-        <image-slot id="lbe_portrait" src="img/portrait.jpg" fit="cover" shape="rect" placeholder="Portrait — Laëtitia" style="width:100%;height:560px;border-radius:230px 230px 28px 28px;"></image-slot>
+        <image-slot id="lbe_portrait" src="img/portrait.jpg" fit="cover" shape="rect" placeholder="Portrait — Laëtitia" style="width:100%;height:560px;border-radius:36px;"></image-slot>
         <span style="position:absolute;left:-22px;top:34px;bottom:34px;width:14px;border-radius:999px;background:#e8c9b8;z-index:-1;"></span>
         <img src="img/feuille.png" alt="" aria-hidden="true" style="position:absolute;right:-18px;bottom:26px;width:108px;height:108px;object-fit:contain;opacity:.9;">
       </div>
@@ -419,7 +421,7 @@ image-slot{touch-action:auto;}
         <h3 style="font-family:'Playfair Display',Georgia,serif;color:#2b3a26;font-weight:600;font-size:21px;line-height:1.2;margin:0 0 22px;position:relative;z-index:1;">Tarifs des consultations – chemin vers l'équilibre</h3>
         <ul style="list-style:none;margin:0;padding:0;position:relative;z-index:1;">
           <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;border-bottom:1px dashed rgba(122,155,118,.4);"><span style="font-weight:600;color:#2b3a26;">Bilan naturopathique</span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#c47a5b;white-space:nowrap;">60 €</span></li>
-          <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;"><span style="font-weight:600;color:#2b3a26;">Kinésiologie instinctive<span style="display:block;font-size:13.5px;font-weight:400;color:#6f7c69;margin-top:2px;">1h30 – 2h00</span></span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#c47a5b;white-space:nowrap;">70 €</span></li>
+          <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;"><span style="font-weight:600;color:#2b3a26;">Kinésiologie instinctive<span style="display:block;font-size:13.5px;font-weight:400;color:#6f7c69;margin-top:2px;">1h30 – 2h00</span></span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#c47a5b;white-space:nowrap;">65 €</span></li>
         </ul>
       </div>
       <div style="background:#5f7d5c;color:#fff;border-radius:26px;padding:34px 30px;height:100%;position:relative;overflow:hidden;">
@@ -597,7 +599,7 @@ image-slot{touch-action:auto;}
     <div class="lb-foot" style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;">
       <div>
         <a href="#accueil" style="display:flex;align-items:center;gap:13px;">
-          <img class="lb-logo" src="img/logo7.png" alt="" style="width:56px;height:56px;object-fit:contain;flex:none;">
+          <img src="img/logo7.png" alt="" style="width:56px;height:56px;object-fit:contain;flex:none;">
           <span style="line-height:1.05;"><span style="font-family:'Playfair Display',Georgia,serif;font-size:23px;font-weight:600;color:#fff;">Laëti'<span style="color:#e8c9b8;">Bienfaits</span></span><br><span style="font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#a9c2a3;font-weight:600;">Naturopathie · Kinésiologie</span></span>
         </a>
         <p style="margin-top:18px;max-width:36ch;font-size:16px;line-height:1.7;color:rgba(255,255,255,.74);">Laëtitia Ehles — naturopathe référencée à l'OMNES, formée en kinésiologie instinctive. Accompagnement des enfants, adolescents et adultes.</p>
@@ -880,6 +882,26 @@ class Component extends DCLogic {
     for (var pc = 0; pc < pracCards.length; pc++) {
       (function(i){ pracCards[i].addEventListener('click', function(){ openModal(i); }); })(pc);
     }
+    // Raccourcis Tarifs -> ouvre la description (modal) de chaque prestation
+    var tarifMap = [0, 1, 2, 2, 2, 3, 3, 3]; // ordre des prestations -> index de modal
+    var tarifLis = document.querySelectorAll('#tarifs .lb-price li');
+    var infoSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>';
+    for (var ti = 0; ti < tarifLis.length; ti++) {
+      (function(li, mi){
+        if (mi == null) return;
+        li.style.cursor = 'pointer';
+        li.setAttribute('title', 'Voir la description');
+        var nameSpan = li.querySelector('span');
+        if (nameSpan) {
+          var ic = document.createElement('span');
+          ic.style.cssText = 'display:inline-block;margin-left:6px;color:#c47a5b;opacity:.9;';
+          ic.innerHTML = infoSvg;
+          var sub = nameSpan.querySelector('span');
+          if (sub) nameSpan.insertBefore(ic, sub); else nameSpan.appendChild(ic);
+        }
+        li.addEventListener('click', function(){ openModal(mi); });
+      })(tarifLis[ti], tarifMap[ti]);
+    }
     modal.addEventListener('click', function(e){
       if (e.target.closest('[data-close]')) { closeModal(); return; }
       var cta = e.target.closest('.lb-modal-cta');
@@ -933,24 +955,6 @@ class Component extends DCLogic {
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { if (dx < 0) nextLB(); else prevLB(); }
     }, { passive: true });
   }
-})();
-</script>
-<!-- ⚙️ TEMPORAIRE — défilement des logos au clic du header (à retirer après validation) -->
-<script>
-(function(){
-  var logos = ['img/logo7.png','img/logo1.png','img/logo2.png','img/logo3.png','img/logo4.png','img/logo5.png','img/logo6.png','img/logo-laeti.png'];
-  var imgs = document.querySelectorAll('.lb-logo');          // header + footer (synchronisés)
-  var trigger = document.querySelector('header .lb-logo');   // le clic se fait sur le logo du header
-  if (!imgs.length || !trigger) return;
-  var i = 0;
-  function apply(){ for (var k = 0; k < imgs.length; k++) imgs[k].src = logos[i]; }
-  trigger.style.cursor = 'pointer';
-  trigger.setAttribute('title', 'Cliquez pour changer de logo');
-  trigger.addEventListener('click', function(e){
-    e.preventDefault(); e.stopPropagation();
-    i = (i + 1) % logos.length;
-    apply();
-  });
 })();
 </script>
 </body>

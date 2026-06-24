@@ -41,7 +41,6 @@
     width:108px;height:108px;
     display:grid;place-items:center;
     margin:0 auto 18px;
-    cursor:pointer;
   }
   .logo img{width:100%;height:100%;object-fit:contain;display:block;}
   h1{
@@ -136,8 +135,8 @@
 <body>
 
 <div class="card">
-  <div class="logo" id="cstr-logo" title="Cliquez pour changer de logo">
-    <img id="cstr-logo-img" src="img/logo7.png" alt="Laëti'Bienfaits">
+  <div class="logo">
+    <img src="img/logo7.png" alt="Laëti'Bienfaits">
   </div>
 
   <span class="eyebrow">Site en construction</span>
@@ -199,24 +198,6 @@
   if (document.cookie.indexOf('lb_access=1') !== -1) {
     window.location.href = PREVIEW_URL;
   }
-})();
-</script>
-
-<!-- ⚙️ TEMPORAIRE — sélecteur de logo (à retirer après validation) -->
-<script>
-(function(){
-  var logos  = ['img/logo7.png','img/logo1.png','img/logo2.png','img/logo3.png','img/logo4.png','img/logo5.png','img/logo6.png','img/logo-laeti.png'];
-  var labels = ['logo7','logo1','logo2','logo3','logo4','logo5','logo6','actuel'];
-  var box = document.getElementById('cstr-logo');
-  var img = document.getElementById('cstr-logo-img');
-  var nameEl = document.getElementById('cstr-logo-name');
-  if (!box || !img) return;
-  var i = 0;
-  box.addEventListener('click', function(){
-    i = (i + 1) % logos.length;
-    img.src = logos[i];
-    if (nameEl) nameEl.textContent = labels[i];
-  });
 })();
 </script>
 
