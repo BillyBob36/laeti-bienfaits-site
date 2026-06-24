@@ -36,6 +36,8 @@ section[id]{scroll-margin-top:0;}
 }
 @media(max-width:900px){
   .lb-2col{grid-template-columns:1fr!important;gap:40px!important;}
+  /* Événements (cueillette) sur mobile : titre+description en haut, carrousel en dessous */
+  .lb-evt > .lb-cuei{order:2;}
   .lb-prac-grid{grid-template-columns:1fr 1fr!important;}
   .lb-foot{grid-template-columns:1fr 1fr!important;}
 }
@@ -525,7 +527,7 @@ image-slot{touch-action:auto;}
 <section class="lb-sec" style="padding:96px 0;background:#eef4ea;">
   <div style="max-width:1180px;margin:0 auto;padding:0 28px;">
     <p style="font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:13px;font-weight:700;color:#5f7d5c;margin:0 0 24px;text-align:center;">Evènements et ateliers</p>
-    <div class="lb-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 18px 50px -28px rgba(43,58,38,.45);border:1px solid rgba(122,155,118,.2);">
+    <div class="lb-2col lb-evt" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 18px 50px -28px rgba(43,58,38,.45);border:1px solid rgba(122,155,118,.2);">
       <div class="lb-cuei" style="position:relative;min-height:380px;height:100%;overflow:hidden;">
         <div id="lbe-cuei-track" class="lb-cuei-track" style="display:flex;height:100%;min-height:380px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
           <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-1.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
