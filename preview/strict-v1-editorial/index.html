@@ -567,7 +567,7 @@ image-slot{touch-action:auto;}
       <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal10" src="img/bol-chantant-1.jpg" fit="cover" placeholder="Soin au bol chantant" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
       <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal11" src="img/bol-chantant-2.jpg" fit="cover" placeholder="Soin au bol chantant" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
       <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal12" src="img/diapason.jpg" fit="cover" placeholder="Soin au diapason" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
-      <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;position:relative;background:#11140e;"><video src="img/atelier-diy.mp4" poster="img/atelier-diy-poster.jpg" controls muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+      <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><div class="lb-gal" data-video="img/atelier-diy.mp4" data-poster="img/atelier-diy-poster.jpg" style="width:100%;height:100%;position:relative;cursor:pointer;"><img src="img/atelier-diy-poster.jpg" alt="Atelier DIY (vidéo)" style="width:100%;height:100%;object-fit:cover;display:block;"><span aria-hidden="true" style="position:absolute;inset:0;display:grid;place-items:center;background:rgba(17,20,14,.28);"><span style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,0,0,.35);"><svg width="20" height="20" viewBox="0 0 24 24" fill="#2b3a26" style="margin-left:3px;"><path d="M8 5v14l11-7z"></path></svg></span></span></div></div>
     </div>
   </div>
 </section>
@@ -687,6 +687,7 @@ image-slot{touch-action:auto;}
   <button class="lb-lb-close" type="button" aria-label="Fermer" data-lbclose><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
   <button class="lb-lb-btn lb-lb-prev" type="button" aria-label="Image précédente"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
   <img class="lb-lb-img" id="lb-lb-img" src="" alt="">
+  <video class="lb-lb-img" id="lb-lb-video" controls loop muted playsinline preload="metadata" style="display:none;background:#000;"></video>
   <button class="lb-lb-btn lb-lb-next" type="button" aria-label="Image suivante"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
   <div class="lb-lb-count" id="lb-lb-count"></div>
 </div>
@@ -1034,16 +1035,33 @@ class Component extends DCLogic {
   var lb = document.getElementById('lb-lightbox');
   if (galSlots.length && lb) {
     var lbImg = document.getElementById('lb-lb-img');
+    var lbVid = document.getElementById('lb-lb-video');
     var lbCount = document.getElementById('lb-lb-count');
-    var srcs = [];
+    var items = [];
     for (var g = 0; g < galSlots.length; g++) {
-      srcs.push(galSlots[g].getAttribute('src'));
+      var gel = galSlots[g];
+      if (gel.dataset && gel.dataset.video) items.push({ type: 'video', src: gel.dataset.video, poster: gel.dataset.poster || '' });
+      else items.push({ type: 'image', src: gel.getAttribute('src') });
       (function(i){ galSlots[i].addEventListener('click', function(){ openLB(i); }); })(g);
     }
-    var lbIdx = 0, nsrc = srcs.length;
-    function showLB(){ lbImg.src = srcs[lbIdx]; lbCount.textContent = (lbIdx + 1) + ' / ' + nsrc; }
+    var lbIdx = 0, nsrc = items.length;
+    function showLB(){
+      var it = items[lbIdx];
+      if (it.type === 'video') {
+        lbImg.style.display = 'none'; lbVid.style.display = '';
+        if (lbVid.getAttribute('src') !== it.src) lbVid.setAttribute('src', it.src);
+        if (it.poster) lbVid.poster = it.poster;
+        try { lbVid.currentTime = 0; } catch (e) {}
+        var pr = lbVid.play(); if (pr && pr.catch) pr.catch(function(){});
+      } else {
+        try { lbVid.pause(); } catch (e) {}
+        lbVid.style.display = 'none'; lbImg.style.display = '';
+        lbImg.src = it.src;
+      }
+      lbCount.textContent = (lbIdx + 1) + ' / ' + nsrc;
+    }
     function openLB(i){ lbIdx = i; showLB(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
-    function closeLB(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+    function closeLB(){ lb.classList.remove('open'); document.body.style.overflow = ''; try { lbVid.pause(); } catch (e) {} }
     function nextLB(){ lbIdx = (lbIdx + 1) % nsrc; showLB(); }
     function prevLB(){ lbIdx = (lbIdx - 1 + nsrc) % nsrc; showLB(); }
     lb.querySelector('.lb-lb-next').addEventListener('click', function(e){ e.stopPropagation(); nextLB(); });
