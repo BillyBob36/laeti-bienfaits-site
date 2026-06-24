@@ -95,6 +95,8 @@ image-slot{touch-action:auto;}
 .lb-dots-dark .lb-dot.on{background:#ffffff;width:30px;}
 .lb-dots-light .lb-dot{background:rgba(122,155,118,.4);}
 .lb-dots-light .lb-dot.on{background:#c47a5b;width:30px;}
+.lb-cuei-track::-webkit-scrollbar{display:none;}
+#lbe-tmoi-track::-webkit-scrollbar{display:none;}
 
 /* === MODAL pratiques === */
 .lb-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
@@ -287,7 +289,7 @@ image-slot{touch-action:auto;}
       <div style="position:relative;">
         <image-slot id="lbe_portrait" src="img/portrait.jpg" fit="cover" shape="rect" placeholder="Portrait — Laëtitia" style="width:100%;height:560px;border-radius:36px;"></image-slot>
         <span style="position:absolute;left:-22px;top:34px;bottom:34px;width:14px;border-radius:999px;background:#e8c9b8;z-index:-1;"></span>
-        <img src="img/feuille.png" alt="" aria-hidden="true" style="position:absolute;right:-18px;bottom:26px;width:108px;height:108px;object-fit:contain;opacity:.9;">
+        <img src="img/ginkgo.png" alt="" aria-hidden="true" style="position:absolute;right:-28px;bottom:-26px;width:150px;height:150px;object-fit:contain;transform:rotate(10deg);filter:drop-shadow(0 8px 16px rgba(0,0,0,.14));">
       </div>
       <div>
         <p style="font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:13px;font-weight:700;color:#5f7d5c;margin:0 0 14px;">Qui suis-je ?</p>
@@ -527,7 +529,15 @@ image-slot{touch-action:auto;}
   <div style="max-width:1180px;margin:0 auto;padding:0 28px;">
     <p style="font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:13px;font-weight:700;color:#5f7d5c;margin:0 0 24px;text-align:center;">Evènements et ateliers</p>
     <div class="lb-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 18px 50px -28px rgba(43,58,38,.45);border:1px solid rgba(122,155,118,.2);">
-      <image-slot id="lbe_event1" src="img/big-tree.jpg" fit="cover" shape="rect" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot>
+      <div class="lb-cuei" style="position:relative;min-height:380px;height:100%;overflow:hidden;">
+        <div id="lbe-cuei-track" class="lb-cuei-track" style="display:flex;height:100%;min-height:380px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
+          <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-1.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
+          <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-2.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
+          <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-3.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
+          <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-4.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
+        </div>
+        <div id="lbe-cuei-dots" style="position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:9px;z-index:2;"></div>
+      </div>
       <div style="padding:48px 50px;">
         <p style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:#5f7d5c;margin:0 0 8px;">Chaque année au 1<sup>er</sup> mai · secteur de Commercy (lieu variable)</p>
         <h3 style="font-family:'Playfair Display',Georgia,serif;color:#2b3a26;font-weight:600;font-size:clamp(26px,3vw,34px);margin:0 0 16px;line-height:1.15;">Balade cueillette de plantes médicinales</h3>
@@ -554,6 +564,29 @@ image-slot{touch-action:auto;}
       <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal7" src="img/moxa-2.jpg" fit="cover" placeholder="Moxibustion" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
       <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal8" src="img/atelier-2022.jpg" fit="cover" placeholder="Atelier 2022" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
       <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal9" src="img/atelier-2025.jpg" fit="cover" placeholder="Atelier 2025" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
+      <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal10" src="img/bol-chantant-1.jpg" fit="cover" placeholder="Soin au bol chantant" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
+      <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal11" src="img/bol-chantant-2.jpg" fit="cover" placeholder="Soin au bol chantant" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
+      <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;"><image-slot id="lbe_gal12" src="img/diapason.jpg" fit="cover" placeholder="Soin au diapason" class="lb-gal" style="width:100%;height:100%;"></image-slot></div>
+      <div style="aspect-ratio:1;overflow:hidden;border-radius:12px;position:relative;background:#11140e;"><video src="img/atelier-diy.mp4" poster="img/atelier-diy-poster.jpg" controls muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TÉMOIGNAGES ===================== -->
+<section id="temoignages" class="lb-sec" style="padding:96px 0;background:#eef4ea;">
+  <div style="max-width:980px;margin:0 auto;padding:0 28px;">
+    <div style="text-align:center;margin-bottom:34px;">
+      <p style="font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:13px;font-weight:700;color:#5f7d5c;margin:0 0 14px;">Témoignages</p>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;color:#2b3a26;font-weight:600;font-size:clamp(30px,4vw,46px);line-height:1.12;margin:0;">Ce qu'ils <span style="font-style:italic;color:#5f7d5c;font-weight:500;">en disent</span></h2>
+      <a href="https://www.google.com/maps?cid=7287759314387895465" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:9px 18px;border-radius:999px;background:#fff;border:1px solid rgba(122,155,118,.3);text-decoration:none;color:#2b3a26;font-weight:600;font-size:15px;box-shadow:0 8px 22px -12px rgba(43,58,38,.45);">
+        <span style="color:#f5b301;font-size:17px;letter-spacing:1px;">★★★★★</span>
+        <span>5,0 · 32 avis Google</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5f7d5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"></path></svg>
+      </a>
+    </div>
+    <div class="lb-tmoi" style="position:relative;">
+      <div id="lbe-tmoi-track" style="display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;"></div>
+      <div id="lbe-tmoi-dots" class="lb-dots-light" style="display:flex;justify-content:center;gap:10px;margin-top:26px;"></div>
     </div>
   </div>
 </section>
@@ -814,6 +847,87 @@ class Component extends DCLogic {
     car.addEventListener('scroll', function(){ if (raf) return; raf = requestAnimationFrame(function(){ raf = null; upd(); }); });
     upd();
   });
+
+  // === DIAPO Cueillette (Événements) : 1 image à la fois, points + swipe + auto-défilement ===
+  (function(){
+    var track = document.getElementById('lbe-cuei-track');
+    var dotsBox = document.getElementById('lbe-cuei-dots');
+    if (!track || !dotsBox || !track.children.length) return;
+    var nb = track.children.length;
+    function cw(){ return track.getBoundingClientRect().width || 1; }
+    for (var i = 0; i < nb; i++) {
+      (function(i){
+        var b = document.createElement('button'); b.type = 'button';
+        b.setAttribute('aria-label', 'Photo ' + (i + 1));
+        b.style.cssText = 'width:9px;height:9px;border:0;padding:0;border-radius:999px;cursor:pointer;background:rgba(255,255,255,.6);box-shadow:0 1px 4px rgba(0,0,0,.45);transition:width .25s,background .25s;';
+        b.addEventListener('click', function(){ track.scrollTo({ left: i * cw(), behavior: 'smooth' }); });
+        dotsBox.appendChild(b);
+      })(i);
+    }
+    var dots = dotsBox.children, raf = null, timer = null, resumeT = null;
+    function upd(){
+      var idx = Math.round(track.scrollLeft / cw()); idx = Math.max(0, Math.min(nb - 1, idx));
+      for (var j = 0; j < dots.length; j++) {
+        var on = j === idx;
+        dots[j].style.width = on ? '24px' : '9px';
+        dots[j].style.background = on ? '#fff' : 'rgba(255,255,255,.6)';
+      }
+    }
+    function go(){ var idx = Math.round(track.scrollLeft / cw()); idx = (idx + 1) % nb; track.scrollTo({ left: idx * cw(), behavior: 'smooth' }); }
+    function start(){ stop(); timer = setInterval(go, 5000); }
+    function stop(){ if (timer) { clearInterval(timer); timer = null; } }
+    track.addEventListener('scroll', function(){
+      if (!raf) raf = requestAnimationFrame(function(){ raf = null; upd(); });
+      clearTimeout(resumeT); resumeT = setTimeout(start, 7000);
+    });
+    track.addEventListener('pointerdown', stop);
+    upd(); start();
+  })();
+
+  // === TÉMOIGNAGES (avis Google 5 étoiles) : carrousel points + swipe + auto-défilement ===
+  (function(){
+    var TMOI=[
+      {n:"Delphine D.", t:"Je tenais à vous remercier du fond du cœur. Mon fils (9 ans) a déjà fait de très beaux progrès en seulement deux séances, et sa maîtresse l'a elle aussi constaté. Votre accompagnement est précieux et m'a vraiment apporté beaucoup de bien."},
+      {n:"Marion V.", t:"Laetitia est une professionnelle exceptionnelle. Avec une écoute attentive et une intuition remarquable, elle met en lumière ce qui freine et aide à le libérer avec douceur et efficacité. Chaque séance est un réel moment de bien-être."},
+      {n:"Nathalie M.", t:"Une expérience magique avec le massage au bol sonore ! Dès les premières vibrations, une profonde détente m'a envahie. Un véritable émerveillement qui a réveillé une joie profonde en moi."},
+      {n:"Anaïs B.", t:"Je recommande les yeux fermés. Cela fait quelques mois que mon fils et moi y allons et peu à peu les choses se débloquent. Merci pour vos précieux conseils. La sérénité revient peu à peu dans notre corps."},
+      {n:"Jennifer M.", t:"Laëtitia vous accueille comme vous êtes et propose des soins adaptés à vos besoins, en prenant en compte votre ressenti. C'est une très belle personne, toujours bienveillante, respectueuse et impliquée."},
+      {n:"Mélanie L.", t:"Une personne qui reflète la sérénité et le respect. Elle a su stabiliser mon anxiété et mon mal-être au quotidien, et je me sens beaucoup mieux depuis que je consulte. D'excellents conseils, sans jugement."},
+      {n:"Sandrine L.", t:"Quand on rentre dans le cabinet de Laëtitia, on sent déjà que l'on va se détendre. Elle vous accueille avec le sourire et prend le temps d'être à votre écoute. Merci pour le massage Aromatouch en douceur."},
+      {n:"Erika C.", t:"Super séance de consultation pour un bilan. Une vraie écoute, des questions qui font réfléchir bien après la consultation. Des conseils et de la bienveillance. Merci 😊"},
+      {n:"Myriam F.", t:"Un énorme merci pour ton professionnalisme, tu as le don de mettre tout de suite à l'aise. Merci pour toutes tes astuces et recettes qui motivent et boostent énormément. Je recommande les yeux fermés."},
+      {n:"Maxime M.", t:"Superbe expérience, cabinet superbe, soins et massages de qualité. Problème de dos entièrement disparu et détente au maximum ! Je recommande fortement."},
+      {n:"Christel M.", t:"Je ne peux que vous conseiller d'aller chez Laëti'Bienfaits. Des moments de détente, de soins, à l'écoute de votre bien-être. Quel que soit votre mal ou votre envie, vous trouverez le soin adapté."},
+      {n:"Sophie G.", t:"Merci pour toutes les informations nutritionnelles et votre écoute. Je vais pouvoir rectifier mes erreurs alimentaires et enfin trouver la paix avec moi-même. Je recommande sans modération 👍"},
+      {n:"Julie M.", t:"Je suis absolument conquise ! Elle est tout simplement exceptionnelle. Son approche, son écoute et son don pour ce qu'elle fait m'ont profondément marquée. Elle a su cerner mes besoins avec une précision incroyable."}
+    ];
+    var track=document.getElementById('lbe-tmoi-track');
+    var dotsBox=document.getElementById('lbe-tmoi-dots');
+    if(!track||!dotsBox) return;
+    var STARS='<span style="color:#f5b301;letter-spacing:2px;font-size:16px;">★★★★★</span>';
+    TMOI.forEach(function(r){
+      var s=document.createElement('div');
+      s.style.cssText='flex:0 0 100%;scroll-snap-align:center;box-sizing:border-box;padding:6px 8px;';
+      s.innerHTML='<blockquote style="margin:0 auto;max-width:720px;background:#fff;border:1px solid rgba(122,155,118,.2);border-radius:24px;padding:34px clamp(22px,5vw,42px);box-shadow:0 20px 54px -32px rgba(43,58,38,.5);min-height:228px;display:flex;flex-direction:column;justify-content:center;text-align:center;box-sizing:border-box;">'
+        +'<div style="font-family:\'Playfair Display\',Georgia,serif;font-size:58px;line-height:.1;color:#d8b9a3;height:30px;">“</div>'
+        +'<p style="font-size:18px;line-height:1.7;color:#3a4a33;margin:8px 0 22px;font-style:italic;">'+r.t+'</p>'
+        +'<div style="margin-bottom:10px;">'+STARS+'</div>'
+        +'<footer style="font-family:\'Playfair Display\',Georgia,serif;font-weight:600;color:#5f7d5c;font-size:17px;font-style:normal;">'+r.n+'</footer>'
+        +'</blockquote>';
+      track.appendChild(s);
+    });
+    var nb=TMOI.length;
+    function cw(){ return track.getBoundingClientRect().width||1; }
+    for(var i=0;i<nb;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.className='lb-dot'; b.setAttribute('aria-label','Avis '+(i+1)); b.addEventListener('click',function(){ track.scrollTo({left:i*cw(),behavior:'smooth'}); }); dotsBox.appendChild(b); })(i); }
+    var dots=dotsBox.children, raf=null, timer=null, resumeT=null;
+    function upd(){ var idx=Math.round(track.scrollLeft/cw()); idx=Math.max(0,Math.min(nb-1,idx)); for(var j=0;j<dots.length;j++) dots[j].classList.toggle('on', j===idx); }
+    function go(){ var idx=Math.round(track.scrollLeft/cw()); idx=(idx+1)%nb; track.scrollTo({left:idx*cw(),behavior:'smooth'}); }
+    function start(){ stop(); timer=setInterval(go,6000); }
+    function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+    track.addEventListener('scroll',function(){ if(!raf) raf=requestAnimationFrame(function(){ raf=null; upd(); }); clearTimeout(resumeT); resumeT=setTimeout(start,9000); });
+    track.addEventListener('pointerdown',stop);
+    upd(); start();
+  })();
 
   // === GLISSER tactile sur le HERO (swipe gauche/droite) ===
   var heroSec = document.getElementById('accueil');
