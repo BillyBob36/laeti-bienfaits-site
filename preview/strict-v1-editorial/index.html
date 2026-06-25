@@ -99,6 +99,35 @@ image-slot{touch-action:auto;}
 .lb-dots-light .lb-dot.on{background:#c47a5b;width:30px;}
 .lb-cuei-track::-webkit-scrollbar{display:none;}
 #lbe-tmoi-track::-webkit-scrollbar{display:none;}
+/* Prise de rendez-vous (widget) */
+.lb-rdv{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;}
+.lb-rdv.open{display:flex;}
+.lb-rdv-bg{position:absolute;inset:0;background:rgba(20,28,16,.55);backdrop-filter:blur(3px);}
+.lb-rdv-box{position:relative;background:#fff;width:min(520px,100%);max-height:90vh;overflow-y:auto;border-radius:24px;padding:34px 30px;box-shadow:0 40px 90px -30px rgba(0,0,0,.5);}
+.lb-rdv-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border:0;border-radius:50%;background:#f0ece4;color:#2b3a26;font-size:15px;cursor:pointer;}
+.lb-rdv-close:hover{background:#e6e0d5;}
+.rdv-step{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;color:#c47a5b;margin:0 0 6px;}
+.rdv-h{font-family:'Playfair Display',Georgia,serif;font-size:24px;color:#2b3a26;margin:0 0 18px;font-weight:600;}
+.rdv-presta{display:flex;flex-direction:column;gap:10px;}
+.rdv-pbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f7f3ed;border:1px solid rgba(122,155,118,.3);border-radius:14px;padding:16px 18px;font-family:inherit;font-size:16px;font-weight:600;color:#2b3a26;cursor:pointer;text-align:left;transition:border-color .15s,background .15s;}
+.rdv-pbtn:hover{border-color:#c47a5b;background:#fdf6f1;}
+.rdv-pbtn small{color:#6f7c69;font-weight:400;white-space:nowrap;}
+.rdv-skip{margin-top:14px;background:transparent;border:0;color:#6f7c69;text-decoration:underline;cursor:pointer;font-family:inherit;font-size:14px;}
+.rdv-days{display:flex;flex-direction:column;gap:16px;}
+.rdv-date{font-weight:700;color:#5f7d5c;margin-bottom:8px;}
+.rdv-slots{display:flex;flex-wrap:wrap;gap:8px;}
+.rdv-slot{background:#fff;border:1px solid rgba(122,155,118,.45);border-radius:10px;padding:10px 14px;font-family:inherit;font-size:15px;font-weight:600;color:#2b3a26;cursor:pointer;transition:all .15s;}
+.rdv-slot:hover{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
+.rdv-recap{background:#eef4ea;border-radius:12px;padding:12px 16px;font-weight:600;color:#2b3a26;margin-bottom:6px;}
+.lb-rdv-box label{display:block;font-weight:600;font-size:14px;color:#2b3a26;margin:14px 0 6px;}
+.lb-rdv-box input,.lb-rdv-box textarea{width:100%;box-sizing:border-box;padding:13px 14px;font-size:16px;font-family:inherit;border:1px solid rgba(122,155,118,.4);border-radius:11px;}
+.rdv-submit{width:100%;margin-top:20px;padding:16px;font-size:16px;font-weight:700;color:#fff;background:#c47a5b;border:0;border-radius:12px;cursor:pointer;}
+.rdv-submit:hover{background:#b66a4d;}
+.rdv-back{display:block;margin:16px auto 0;background:transparent;border:0;color:#6f7c69;cursor:pointer;font-family:inherit;font-size:14px;}
+.rdv-err{color:#b0392b;font-size:14px;margin-top:10px;min-height:18px;}
+.rdv-load,.rdv-empty{color:#6f7c69;line-height:1.6;}
+.rdv-done{text-align:center;}
+.rdv-check{width:64px;height:64px;border-radius:50%;background:#e3eedd;color:#5f7d5c;font-size:34px;display:grid;place-items:center;margin:0 auto 16px;}
 
 /* === MODAL pratiques === */
 .lb-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
@@ -603,11 +632,11 @@ image-slot{touch-action:auto;}
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid rgba(122,155,118,.22);border-radius:16px;padding:22px 24px;">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#e6efe1;color:#5f7d5c;display:grid;place-items:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
-          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Adresse</span><span style="font-weight:600;color:#2b3a26;font-size:18px;">37 rue Dom Calmet<br>55190 Ménil-la-Horgne</span></span>
+          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Adresse</span><span style="font-weight:600;color:#2b3a26;font-size:18px;" data-lb="address">37 rue Dom Calmet<br>55190 Ménil-la-Horgne</span></span>
         </div>
         <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid rgba(122,155,118,.22);border-radius:16px;padding:22px 24px;">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#e6efe1;color:#5f7d5c;display:grid;place-items:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg></span>
-          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Téléphone</span><span style="font-weight:600;color:#2b3a26;font-size:18px;"><a href="tel:+33673962183">06 73 96 21 83</a></span></span>
+          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Téléphone</span><span style="font-weight:600;color:#2b3a26;font-size:18px;"><a href="tel:+33673962183" data-lb="phone">06 73 96 21 83</a></span></span>
         </div>
         <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid rgba(122,155,118,.22);border-radius:16px;padding:22px 24px;">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#e6efe1;color:#5f7d5c;display:grid;place-items:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></span>
@@ -615,12 +644,12 @@ image-slot{touch-action:auto;}
         </div>
         <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid rgba(122,155,118,.22);border-radius:16px;padding:22px 24px;">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#e6efe1;color:#5f7d5c;display:grid;place-items:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>
-          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Horaires</span><span style="font-weight:600;color:#2b3a26;font-size:18px;">Consultations sur rendez-vous du mardi au samedi<br><span style="font-weight:400;color:#6f7c69;font-size:16px;">Consultations à domicile possibles pour les personnes dans l'incapacité de se déplacer · à 10 minutes de Commercy et Ligny-en-Barrois — Secteur Toul</span></span></span>
+          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Horaires</span><span style="font-weight:600;color:#2b3a26;font-size:18px;" data-lb="hours">Consultations sur rendez-vous du mardi au samedi<br><span style="font-weight:400;color:#6f7c69;font-size:16px;">Consultations à domicile possibles pour les personnes dans l'incapacité de se déplacer · à 10 minutes de Commercy et Ligny-en-Barrois — Secteur Toul</span></span></span>
         </div>
         <a class="lb-btn" href="tel:+33673962183" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:18px;padding:18px 38px;border-radius:999px;background:#c47a5b;color:#fff;box-shadow:0 10px 26px -12px rgba(168,98,63,.8);margin-top:6px;">Appeler le 06 73 96 21 83</a>
       </div>
       <div style="border-radius:22px;overflow:hidden;box-shadow:0 12px 40px -24px rgba(43,58,38,.4);border:1px solid rgba(122,155,118,.22);min-height:440px;">
-        <iframe title="Carte — Ménil-la-Horgne 55190" src="https://www.google.com/maps?q=M%C3%A9nil-la-Horgne%2055190&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;min-height:440px;border:0;display:block;"></iframe>
+        <iframe data-lb="map" title="Carte — Ménil-la-Horgne 55190" src="https://www.google.com/maps?q=M%C3%A9nil-la-Horgne%2055190&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;min-height:440px;border:0;display:block;"></iframe>
       </div>
     </div>
   </div>
@@ -690,6 +719,15 @@ image-slot{touch-action:auto;}
   <video class="lb-lb-img" id="lb-lb-video" controls loop muted playsinline preload="metadata" style="display:none;background:#000;"></video>
   <button class="lb-lb-btn lb-lb-next" type="button" aria-label="Image suivante"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
   <div class="lb-lb-count" id="lb-lb-count"></div>
+</div>
+
+<!-- ===================== PRISE DE RENDEZ-VOUS ===================== -->
+<div class="lb-rdv" id="lb-rdv" role="dialog" aria-modal="true" aria-label="Prise de rendez-vous">
+  <div class="lb-rdv-bg" data-rdvclose></div>
+  <div class="lb-rdv-box">
+    <button class="lb-rdv-close" type="button" data-rdvclose aria-label="Fermer">✕</button>
+    <div id="lb-rdv-body"></div>
+  </div>
 </div>
 
 </div>
@@ -1178,9 +1216,82 @@ function lbHydrate(C){
   }
 }
 
+function lbRdvWidget(){
+  var modal = document.getElementById('lb-rdv'); if (!modal || modal.__wired) return; modal.__wired = true;
+  var body = document.getElementById('lb-rdv-body');
+  var S = {};
+  function parseDur(s){ if(!s) return 0; s=String(s).toLowerCase(); var m=s.match(/(\d+)\s*h\s*(\d+)?/); if(m) return parseInt(m[1],10)*60+(m[2]?parseInt(m[2],10):0); m=s.match(/(\d+)\s*min/); return m?parseInt(m[1],10):0; }
+  function prestations(){
+    var out=[];
+    document.querySelectorAll('#tarifs .lb-price li').forEach(function(li){
+      var nameSpan=li.querySelector('span'); if(!nameSpan) return;
+      var name=''; nameSpan.childNodes.forEach(function(nd){ if(nd.nodeType===3) name+=nd.textContent; }); name=name.replace(/\s+/g,' ').trim();
+      var dur=0; nameSpan.querySelectorAll('span').forEach(function(sp){ var d=parseDur(sp.textContent); if(d) dur=d; });
+      if(name) out.push({name:name, duration:dur});
+    });
+    return out.length?out:[{name:'Consultation',duration:60}];
+  }
+  function frDate(ds){ try{ var s=new Date(ds+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }catch(e){ return ds; } }
+  function open(){ S={duration:60}; modal.classList.add('open'); document.body.style.overflow='hidden'; stepPresta(); }
+  function close(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+  modal.addEventListener('click', function(e){ if(e.target.closest('[data-rdvclose]')) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && modal.classList.contains('open')) close(); });
+
+  function stepPresta(){
+    var ps=prestations();
+    var h='<p class="rdv-step">Étape 1 sur 3</p><h3 class="rdv-h">Quelle prestation souhaitez-vous ?</h3><div class="rdv-presta">';
+    ps.forEach(function(p,i){ h+='<button class="rdv-pbtn" type="button" data-i="'+i+'"><span>'+lbEsc(p.name)+'</span>'+(p.duration?'<small>'+p.duration+' min</small>':'')+'</button>'; });
+    h+='</div><button class="rdv-skip" type="button">Je ne sais pas encore / autre motif</button>';
+    body.innerHTML=h;
+    body.querySelectorAll('.rdv-pbtn').forEach(function(b){ b.onclick=function(){ var p=ps[+b.dataset.i]; S.prestation=p.name; S.duration=p.duration||60; stepSlot(); }; });
+    body.querySelector('.rdv-skip').onclick=function(){ S.prestation=''; S.duration=60; stepSlot(); };
+  }
+  function stepSlot(){
+    body.innerHTML='<p class="rdv-step">Étape 2 sur 3</p><h3 class="rdv-h">Choisissez un créneau</h3><p class="rdv-load">Recherche des disponibilités…</p>';
+    fetch(LB_API+'/api/slots?duration='+S.duration).then(function(r){return r.json();}).then(function(d){
+      var h='<p class="rdv-step">Étape 2 sur 3</p><h3 class="rdv-h">Choisissez un créneau</h3>';
+      if(!d.days||!d.days.length){ body.innerHTML=h+'<p class="rdv-empty">Aucun créneau disponible en ligne pour le moment. Vous pouvez appeler le 06 73 96 21 83.</p><button class="rdv-back" type="button">‹ Retour</button>'; body.querySelector('.rdv-back').onclick=stepPresta; return; }
+      h+='<div class="rdv-days">';
+      d.days.forEach(function(day){ h+='<div class="rdv-day"><div class="rdv-date">'+frDate(day.date)+'</div><div class="rdv-slots">'; day.slots.forEach(function(t){ h+='<button class="rdv-slot" type="button" data-d="'+day.date+'" data-t="'+t+'">'+t+'</button>'; }); h+='</div></div>'; });
+      h+='</div><button class="rdv-back" type="button">‹ Retour</button>';
+      body.innerHTML=h;
+      body.querySelectorAll('.rdv-slot').forEach(function(b){ b.onclick=function(){ S.date=b.dataset.d; S.time=b.dataset.t; stepForm(); }; });
+      body.querySelector('.rdv-back').onclick=stepPresta;
+    }).catch(function(){ body.innerHTML='<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; });
+  }
+  function stepForm(){
+    body.innerHTML='<p class="rdv-step">Étape 3 sur 3</p><h3 class="rdv-h">Vos coordonnées</h3>'
+      +'<div class="rdv-recap">'+(S.prestation?lbEsc(S.prestation)+' — ':'')+frDate(S.date)+' à '+S.time+'</div>'
+      +'<label>Nom et prénom *</label><input id="rdv-name" type="text" autocomplete="name">'
+      +'<label>Téléphone *</label><input id="rdv-phone" type="tel" inputmode="tel" autocomplete="tel">'
+      +'<label>Motif de la consultation (facultatif)</label><textarea id="rdv-motif" rows="2"></textarea>'
+      +'<div class="rdv-err" id="rdv-err"></div>'
+      +'<button class="rdv-submit" id="rdv-submit" type="button">Envoyer ma demande</button>'
+      +'<button class="rdv-back" type="button">‹ Retour</button>';
+    body.querySelector('.rdv-back').onclick=stepSlot;
+    body.querySelector('#rdv-submit').onclick=submit;
+  }
+  function submit(){
+    var name=body.querySelector('#rdv-name').value.trim(), phone=body.querySelector('#rdv-phone').value.trim(), motif=body.querySelector('#rdv-motif').value.trim();
+    var err=body.querySelector('#rdv-err');
+    if(name.length<2 || phone.replace(/[^0-9]/g,'').length<9){ err.textContent="Merci d'indiquer votre nom et un numéro de téléphone valide."; return; }
+    var btn=body.querySelector('#rdv-submit'); btn.disabled=true; btn.textContent='Envoi…';
+    fetch(LB_API+'/api/booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,phone:phone,motif:motif,prestation:S.prestation,date:S.date,time:S.time,duration:S.duration})})
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
+      .then(function(res){ if(!res.ok) throw new Error((res.j&&res.j.error)||'Une erreur est survenue.'); doneStep(); })
+      .catch(function(e){ err.textContent=e.message; btn.disabled=false; btn.textContent='Envoyer ma demande'; });
+  }
+  function doneStep(){
+    body.innerHTML='<div class="rdv-done"><div class="rdv-check">✓</div><h3 class="rdv-h">Demande envoyée !</h3>'
+      +"<p>Votre demande de rendez-vous a bien été transmise à Laëtitia. Elle va l'étudier et vous recevrez sa réponse par SMS sous peu.</p>"
+      +'<button class="rdv-submit" type="button" data-rdvclose>Fermer</button></div>';
+  }
+  document.querySelectorAll('a.lb-btn[href="#contact"]').forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); open(); }); });
+}
+
 (function(){
   var done = false;
-  function run(C){ if (done) return; done = true; try { lbHydrate(C); } catch(e){ console.warn('hydrate', e); } lbMain(); }
+  function run(C){ if (done) return; done = true; window.__LBC = (C && typeof C === 'object') ? C : {}; try { lbHydrate(C); } catch(e){ console.warn('hydrate', e); } lbMain(); try { lbRdvWidget(); } catch(e){ console.warn('rdv', e); } }
   var to = setTimeout(function(){ run(null); }, 1800);
   fetch(LB_API + '/api/content', { cache: 'no-store' })
     .then(function(r){ return r.ok ? r.json() : null; })
