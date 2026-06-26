@@ -103,7 +103,11 @@ image-slot{touch-action:auto;}
 .lb-rdv{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;}
 .lb-rdv.open{display:flex;}
 .lb-rdv-bg{position:absolute;inset:0;background:rgba(20,28,16,.55);backdrop-filter:blur(3px);}
-.lb-rdv-box{position:relative;background:#fff;width:min(520px,100%);max-height:90vh;overflow-y:auto;border-radius:24px;padding:34px 30px;box-shadow:0 40px 90px -30px rgba(0,0,0,.5);}
+.lb-rdv-box{position:relative;background:#fff;width:min(520px,100%);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:24px;padding:34px 30px;box-shadow:0 40px 90px -30px rgba(0,0,0,.5);scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.32) transparent;}
+.lb-rdv-box::-webkit-scrollbar{width:7px;}
+.lb-rdv-box::-webkit-scrollbar-track{background:transparent;margin:14px 0;}
+.lb-rdv-box::-webkit-scrollbar-thumb{background:rgba(122,155,118,.32);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+.lb-rdv-box::-webkit-scrollbar-thumb:hover{background:rgba(122,155,118,.5);background-clip:padding-box;}
 .lb-rdv-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border:0;border-radius:50%;background:#f0ece4;color:#2b3a26;font-size:15px;cursor:pointer;}
 .lb-rdv-close:hover{background:#e6e0d5;}
 .rdv-step{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;color:#c47a5b;margin:0 0 6px;}
@@ -128,6 +132,16 @@ image-slot{touch-action:auto;}
 .rdv-load,.rdv-empty{color:#6f7c69;line-height:1.6;}
 .rdv-done{text-align:center;}
 .rdv-check{width:64px;height:64px;border-radius:50%;background:#e3eedd;color:#5f7d5c;font-size:34px;display:grid;place-items:center;margin:0 auto 16px;}
+.rdv-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.rdv-2col > div{min-width:0;}
+@media(max-width:560px){
+  .lb-rdv{padding:0;align-items:flex-end;}
+  .lb-rdv-box{width:100%;max-width:100%;max-height:92vh;max-height:92dvh;border-radius:22px 22px 0 0;padding:26px 18px calc(22px + env(safe-area-inset-bottom,0px));}
+  .rdv-h{font-size:21px;}
+  .rdv-2col{grid-template-columns:1fr;gap:0;}
+  .rdv-slot{padding:11px 14px;font-size:16px;}
+  .lb-rdv-close{top:12px;right:12px;}
+}
 
 /* === MODAL pratiques === */
 .lb-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
@@ -640,13 +654,13 @@ image-slot{touch-action:auto;}
         </div>
         <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid rgba(122,155,118,.22);border-radius:16px;padding:22px 24px;">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#e6efe1;color:#5f7d5c;display:grid;place-items:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></span>
-          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Email</span><span style="font-weight:600;color:#2b3a26;font-size:18px;"><a href="/cdn-cgi/l/email-protection#4c202d2938252e2529222a2d25383f0c2b212d2520622f2321"><span class="__cf_email__" data-cfemail="177b7672637e757e727971767e636457707a767e7b3974787a">[email&#160;protected]</span></a></span></span>
+          <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Email</span><span style="font-weight:600;color:#2b3a26;font-size:18px;"><a href="mailto:laetibienfaits@gmail.com" data-lb="email">laetibienfaits@gmail.com</a></span></span>
         </div>
         <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid rgba(122,155,118,.22);border-radius:16px;padding:22px 24px;">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#e6efe1;color:#5f7d5c;display:grid;place-items:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>
           <span><span style="display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:#5f7d5c;margin-bottom:3px;">Horaires</span><span style="font-weight:600;color:#2b3a26;font-size:18px;" data-lb="hours">Consultations sur rendez-vous du mardi au samedi<br><span style="font-weight:400;color:#6f7c69;font-size:16px;">Consultations à domicile possibles pour les personnes dans l'incapacité de se déplacer · à 10 minutes de Commercy et Ligny-en-Barrois — Secteur Toul</span></span></span>
         </div>
-        <a class="lb-btn" href="tel:+33673962183" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:18px;padding:18px 38px;border-radius:999px;background:#c47a5b;color:#fff;box-shadow:0 10px 26px -12px rgba(168,98,63,.8);margin-top:6px;">Appeler le 06 73 96 21 83</a>
+        <a class="lb-btn" href="#contact" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:18px;padding:18px 38px;border-radius:999px;background:#c47a5b;color:#fff;box-shadow:0 10px 26px -12px rgba(168,98,63,.8);margin-top:6px;">Prendre rendez-vous</a>
       </div>
       <div style="border-radius:22px;overflow:hidden;box-shadow:0 12px 40px -24px rgba(43,58,38,.4);border:1px solid rgba(122,155,118,.22);min-height:440px;">
         <iframe data-lb="map" title="Carte — Ménil-la-Horgne 55190" src="https://www.google.com/maps?q=M%C3%A9nil-la-Horgne%2055190&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;min-height:440px;border:0;display:block;"></iframe>
@@ -681,7 +695,7 @@ image-slot{touch-action:auto;}
         <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;">
           <li style="display:flex;gap:12px;align-items:flex-start;font-size:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a9c2a3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>37 rue Dom Calmet, 55190 Ménil-la-Horgne</li>
           <li style="display:flex;gap:12px;align-items:flex-start;font-size:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a9c2a3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg><a href="tel:+33673962183">06 73 96 21 83</a></li>
-          <li style="display:flex;gap:12px;align-items:flex-start;font-size:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a9c2a3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><a href="/cdn-cgi/l/email-protection#d9b5b8bcadb0bbb0bcb7bfb8b0adaa99beb4b8b0b5f7bab6b4"><span class="__cf_email__" data-cfemail="94f8f5f1e0fdf6fdf1faf2f5fde0e7d4f3f9f5fdf8baf7fbf9">[email&#160;protected]</span></a></li>
+          <li style="display:flex;gap:12px;align-items:flex-start;font-size:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a9c2a3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><a href="mailto:laetibienfaits@gmail.com">laetibienfaits@gmail.com</a></li>
           <li style="display:flex;gap:12px;align-items:flex-start;font-size:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a9c2a3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Consultations sur rendez-vous du mardi au samedi</li>
         </ul>
         <p style="margin-top:18px;font-size:14px;color:rgba(255,255,255,.7);">Suivez toutes les actualités sur :</p>
@@ -1232,37 +1246,28 @@ function lbRdvWidget(){
     return out.length?out:[{name:'Consultation',duration:60}];
   }
   function frDate(ds){ try{ var s=new Date(ds+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }catch(e){ return ds; } }
-  function open(){ S={duration:60}; modal.classList.add('open'); document.body.style.overflow='hidden'; stepPresta(); }
+  function open(){ S={duration:60}; modal.classList.add('open'); document.body.style.overflow='hidden'; stepSlot(); }
   function close(){ modal.classList.remove('open'); document.body.style.overflow=''; }
   modal.addEventListener('click', function(e){ if(e.target.closest('[data-rdvclose]')) close(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && modal.classList.contains('open')) close(); });
 
-  function stepPresta(){
-    var ps=prestations();
-    var h='<p class="rdv-step">Étape 1 sur 3</p><h3 class="rdv-h">Quelle prestation souhaitez-vous ?</h3><div class="rdv-presta">';
-    ps.forEach(function(p,i){ h+='<button class="rdv-pbtn" type="button" data-i="'+i+'"><span>'+lbEsc(p.name)+'</span>'+(p.duration?'<small>'+p.duration+' min</small>':'')+'</button>'; });
-    h+='</div><button class="rdv-skip" type="button">Je ne sais pas encore / autre motif</button>';
-    body.innerHTML=h;
-    body.querySelectorAll('.rdv-pbtn').forEach(function(b){ b.onclick=function(){ var p=ps[+b.dataset.i]; S.prestation=p.name; S.duration=p.duration||60; stepSlot(); }; });
-    body.querySelector('.rdv-skip').onclick=function(){ S.prestation=''; S.duration=60; stepSlot(); };
-  }
   function stepSlot(){
-    body.innerHTML='<p class="rdv-step">Étape 2 sur 3</p><h3 class="rdv-h">Choisissez un créneau</h3><p class="rdv-load">Recherche des disponibilités…</p>';
+    body.innerHTML='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3><p class="rdv-load">Recherche des disponibilités…</p>';
     fetch(LB_API+'/api/slots?duration='+S.duration).then(function(r){return r.json();}).then(function(d){
-      var h='<p class="rdv-step">Étape 2 sur 3</p><h3 class="rdv-h">Choisissez un créneau</h3>';
-      if(!d.days||!d.days.length){ body.innerHTML=h+'<p class="rdv-empty">Aucun créneau disponible en ligne pour le moment. Vous pouvez appeler le 06 73 96 21 83.</p><button class="rdv-back" type="button">‹ Retour</button>'; body.querySelector('.rdv-back').onclick=stepPresta; return; }
+      var h='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3>';
+      if(!d.days||!d.days.length){ body.innerHTML=h+'<p class="rdv-empty">Aucun créneau disponible en ligne pour le moment. Vous pouvez appeler le 06 73 96 21 83.</p>'; return; }
       h+='<div class="rdv-days">';
       d.days.forEach(function(day){ h+='<div class="rdv-day"><div class="rdv-date">'+frDate(day.date)+'</div><div class="rdv-slots">'; day.slots.forEach(function(t){ h+='<button class="rdv-slot" type="button" data-d="'+day.date+'" data-t="'+t+'">'+t+'</button>'; }); h+='</div></div>'; });
-      h+='</div><button class="rdv-back" type="button">‹ Retour</button>';
+      h+='</div>';
       body.innerHTML=h;
       body.querySelectorAll('.rdv-slot').forEach(function(b){ b.onclick=function(){ S.date=b.dataset.d; S.time=b.dataset.t; stepForm(); }; });
-      body.querySelector('.rdv-back').onclick=stepPresta;
     }).catch(function(){ body.innerHTML='<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; });
   }
   function stepForm(){
-    body.innerHTML='<p class="rdv-step">Étape 3 sur 3</p><h3 class="rdv-h">Vos coordonnées</h3>'
+    body.innerHTML='<p class="rdv-step">Étape 2 sur 2</p><h3 class="rdv-h">Vos coordonnées</h3>'
       +'<div class="rdv-recap">'+(S.prestation?lbEsc(S.prestation)+' — ':'')+frDate(S.date)+' à '+S.time+'</div>'
-      +'<label>Nom et prénom *</label><input id="rdv-name" type="text" autocomplete="name">'
+      +'<div class="rdv-2col"><div><label>Prénom *</label><input id="rdv-first" type="text" autocomplete="given-name"></div>'
+      +'<div><label>Nom *</label><input id="rdv-last" type="text" autocomplete="family-name"></div></div>'
       +'<label>Téléphone *</label><input id="rdv-phone" type="tel" inputmode="tel" autocomplete="tel">'
       +'<label>Motif de la consultation (facultatif)</label><textarea id="rdv-motif" rows="2"></textarea>'
       +'<div class="rdv-err" id="rdv-err"></div>'
@@ -1272,11 +1277,12 @@ function lbRdvWidget(){
     body.querySelector('#rdv-submit').onclick=submit;
   }
   function submit(){
-    var name=body.querySelector('#rdv-name').value.trim(), phone=body.querySelector('#rdv-phone').value.trim(), motif=body.querySelector('#rdv-motif').value.trim();
+    var first=body.querySelector('#rdv-first').value.trim(), last=body.querySelector('#rdv-last').value.trim(), phone=body.querySelector('#rdv-phone').value.trim(), motif=body.querySelector('#rdv-motif').value.trim();
+    var name=(first+' '+last).trim();
     var err=body.querySelector('#rdv-err');
-    if(name.length<2 || phone.replace(/[^0-9]/g,'').length<9){ err.textContent="Merci d'indiquer votre nom et un numéro de téléphone valide."; return; }
+    if(first.length<2 || last.length<1 || phone.replace(/[^0-9]/g,'').length<9){ err.textContent="Merci d'indiquer vos prénom, nom et un numéro de téléphone valide."; return; }
     var btn=body.querySelector('#rdv-submit'); btn.disabled=true; btn.textContent='Envoi…';
-    fetch(LB_API+'/api/booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,phone:phone,motif:motif,prestation:S.prestation,date:S.date,time:S.time,duration:S.duration})})
+    fetch(LB_API+'/api/booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,firstname:first,lastname:last,phone:phone,motif:motif,prestation:S.prestation,date:S.date,time:S.time,duration:S.duration})})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){ if(!res.ok) throw new Error((res.j&&res.j.error)||'Une erreur est survenue.'); doneStep(); })
       .catch(function(e){ err.textContent=e.message; btn.disabled=false; btn.textContent='Envoyer ma demande'; });
