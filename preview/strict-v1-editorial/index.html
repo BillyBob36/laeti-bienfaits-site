@@ -117,11 +117,22 @@ image-slot{touch-action:auto;}
 .rdv-pbtn:hover{border-color:#c47a5b;background:#fdf6f1;}
 .rdv-pbtn small{color:#6f7c69;font-weight:400;white-space:nowrap;}
 .rdv-skip{margin-top:14px;background:transparent;border:0;color:#6f7c69;text-decoration:underline;cursor:pointer;font-family:inherit;font-size:14px;}
-.rdv-days{display:flex;flex-direction:column;gap:16px;}
-.rdv-date{font-weight:700;color:#5f7d5c;margin-bottom:8px;}
-.rdv-slots{display:flex;flex-wrap:wrap;gap:8px;}
-.rdv-slot{background:#fff;border:1px solid rgba(122,155,118,.45);border-radius:10px;padding:10px 14px;font-family:inherit;font-size:15px;font-weight:600;color:#2b3a26;cursor:pointer;transition:all .15s;}
-.rdv-slot:hover{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
+.rdv-week-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+.rdv-mois{font-weight:700;color:#5f7d5c;font-size:15px;text-align:center;flex:1;}
+.rdv-week-arrow{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid rgba(122,155,118,.4);background:#fff;color:#2b3a26;cursor:pointer;display:grid;place-items:center;font-size:20px;line-height:1;transition:background .15s,opacity .15s;}
+.rdv-week-arrow:hover:not(:disabled){background:#eef4ea;}
+.rdv-week-arrow:disabled{opacity:.32;cursor:default;}
+.rdv-week{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.32) transparent;}
+.rdv-week::-webkit-scrollbar{height:7px;}
+.rdv-week::-webkit-scrollbar-track{background:transparent;}
+.rdv-week::-webkit-scrollbar-thumb{background:rgba(122,155,118,.32);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+.rdv-col{flex:0 0 84px;scroll-snap-align:start;display:flex;flex-direction:column;gap:7px;}
+.rdv-col-hd{text-align:center;font-size:12px;color:#6f7c69;line-height:1.2;padding-bottom:7px;border-bottom:1px solid rgba(122,155,118,.22);}
+.rdv-dow{text-transform:capitalize;}
+.rdv-col-hd b{display:block;font-size:17px;color:#2b3a26;font-weight:700;margin-top:2px;}
+.rdv-cell{background:#fff;border:1px solid rgba(122,155,118,.45);border-radius:9px;padding:9px 4px;font-family:inherit;font-size:14px;font-weight:600;color:#2b3a26;cursor:pointer;transition:all .15s;text-align:center;}
+.rdv-cell:hover{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
+.rdv-none{color:#c2c8bd;text-align:center;font-size:14px;padding:8px 0;}
 .rdv-recap{background:#eef4ea;border-radius:12px;padding:12px 16px;font-weight:600;color:#2b3a26;margin-bottom:6px;}
 .lb-rdv-box label{display:block;font-weight:600;font-size:14px;color:#2b3a26;margin:14px 0 6px;}
 .lb-rdv-box input,.lb-rdv-box textarea{width:100%;box-sizing:border-box;padding:13px 14px;font-size:16px;font-family:inherit;border:1px solid rgba(122,155,118,.4);border-radius:11px;}
@@ -139,7 +150,8 @@ image-slot{touch-action:auto;}
   .lb-rdv-box{width:100%;max-width:100%;max-height:92vh;max-height:92dvh;border-radius:22px 22px 0 0;padding:26px 18px calc(22px + env(safe-area-inset-bottom,0px));}
   .rdv-h{font-size:21px;}
   .rdv-2col{grid-template-columns:1fr;gap:0;}
-  .rdv-slot{padding:11px 14px;font-size:16px;}
+  .rdv-col{flex:0 0 31%;}
+  .rdv-cell{padding:11px 4px;font-size:15px;}
   .lb-rdv-close{top:12px;right:12px;}
 }
 
@@ -1251,16 +1263,51 @@ function lbRdvWidget(){
   modal.addEventListener('click', function(e){ if(e.target.closest('[data-rdvclose]')) close(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && modal.classList.contains('open')) close(); });
 
+  function pad2(n){ return (n<10?'0':'')+n; }
+  function ymd(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+  function addDays(ds,n){ var d=new Date(ds+'T12:00:00'); d.setDate(d.getDate()+n); return ymd(d); }
+  function dowShort(ds){ try{ return new Date(ds+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short'}).replace(/\.$/,''); }catch(e){ return ''; } }
+  function dayNum(ds){ return String(parseInt(ds.slice(8,10),10)); }
+  function moisLabel(ds){ try{ var s=new Date(ds+'T12:00:00').toLocaleDateString('fr-FR',{month:'long',year:'numeric'}); return s.charAt(0).toUpperCase()+s.slice(1); }catch(e){ return ''; } }
   function stepSlot(){
     body.innerHTML='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3><p class="rdv-load">Recherche des disponibilités…</p>';
     fetch(LB_API+'/api/slots?duration='+S.duration).then(function(r){return r.json();}).then(function(d){
-      var h='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3>';
-      if(!d.days||!d.days.length){ body.innerHTML=h+'<p class="rdv-empty">Aucun créneau disponible en ligne pour le moment. Vous pouvez appeler le 06 73 96 21 83.</p>'; return; }
-      h+='<div class="rdv-days">';
-      d.days.forEach(function(day){ h+='<div class="rdv-day"><div class="rdv-date">'+frDate(day.date)+'</div><div class="rdv-slots">'; day.slots.forEach(function(t){ h+='<button class="rdv-slot" type="button" data-d="'+day.date+'" data-t="'+t+'">'+t+'</button>'; }); h+='</div></div>'; });
+      var head='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3>';
+      if(!d.days||!d.days.length){ body.innerHTML=head+'<p class="rdv-empty">Aucun créneau disponible en ligne pour le moment. Vous pouvez appeler le 06 73 96 21 83.</p>'; return; }
+      var map={}; d.days.forEach(function(x){ map[x.date]=x.slots; });
+      var first=d.days[0].date, last=d.days[d.days.length-1].date;
+      var cols=[], cur=first, guard=0;
+      while(cur<=last && guard<400){ cols.push(cur); cur=addDays(cur,1); guard++; }
+      var h=head
+        +'<div class="rdv-week-nav"><button class="rdv-week-arrow" type="button" data-prev aria-label="Jours précédents">‹</button>'
+        +'<span class="rdv-mois" id="rdv-mois">'+moisLabel(first)+'</span>'
+        +'<button class="rdv-week-arrow" type="button" data-next aria-label="Jours suivants">›</button></div>'
+        +'<div class="rdv-week" id="rdv-week">';
+      cols.forEach(function(ds){
+        h+='<div class="rdv-col" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>';
+        var slots=map[ds];
+        if(slots&&slots.length){ slots.forEach(function(t){ h+='<button class="rdv-cell" type="button" data-d="'+ds+'" data-t="'+t+'">'+t+'</button>'; }); }
+        else { h+='<div class="rdv-none">—</div>'; }
+        h+='</div>';
+      });
       h+='</div>';
       body.innerHTML=h;
-      body.querySelectorAll('.rdv-slot').forEach(function(b){ b.onclick=function(){ S.date=b.dataset.d; S.time=b.dataset.t; stepForm(); }; });
+      var track=body.querySelector('#rdv-week'), moisEl=body.querySelector('#rdv-mois');
+      var prevB=body.querySelector('[data-prev]'), nextB=body.querySelector('[data-next]');
+      function visStep(){ return Math.max(track.clientWidth*0.8, 168); }
+      function syncNav(){
+        prevB.disabled = track.scrollLeft<=2;
+        nextB.disabled = track.scrollLeft+track.clientWidth >= track.scrollWidth-2;
+        var kids=track.children, sl=track.scrollLeft, lab=null;
+        for(var i=0;i<kids.length;i++){ if(kids[i].offsetLeft+kids[i].offsetWidth > sl+4){ lab=kids[i].getAttribute('data-date'); break; } }
+        if(lab) moisEl.textContent=moisLabel(lab);
+      }
+      prevB.onclick=function(){ track.scrollBy({left:-visStep(),behavior:'smooth'}); };
+      nextB.onclick=function(){ track.scrollBy({left:visStep(),behavior:'smooth'}); };
+      var raf=null;
+      track.addEventListener('scroll',function(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=null; syncNav(); }); });
+      body.querySelectorAll('.rdv-cell').forEach(function(b){ b.onclick=function(){ S.date=b.dataset.d; S.time=b.dataset.t; stepForm(); }; });
+      syncNav();
     }).catch(function(){ body.innerHTML='<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; });
   }
   function stepForm(){
