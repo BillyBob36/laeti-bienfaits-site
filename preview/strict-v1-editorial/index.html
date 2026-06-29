@@ -101,6 +101,18 @@ image-slot{touch-action:auto;}
 #lbe-tmoi-track::-webkit-scrollbar{display:none;}
 /* Prise de rendez-vous (widget) */
 .lb-rdv{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px;}
+.lb-legal{position:fixed;inset:0;z-index:1300;display:none;align-items:center;justify-content:center;padding:20px;}
+.lb-legal.open{display:flex;}
+.lb-legal-bg{position:absolute;inset:0;background:rgba(20,28,16,.55);backdrop-filter:blur(3px);}
+.lb-legal-box{position:relative;background:#fff;width:min(720px,100%);max-height:88vh;overflow-y:auto;border-radius:20px;padding:34px 34px 28px;box-shadow:0 40px 90px -30px rgba(0,0,0,.5);scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.32) transparent;}
+.lb-legal-box::-webkit-scrollbar{width:7px;}
+.lb-legal-box::-webkit-scrollbar-thumb{background:rgba(122,155,118,.32);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+.lb-legal-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border:0;border-radius:50%;background:#f0ece4;color:#2b3a26;font-size:15px;cursor:pointer;}
+.lb-legal-h{font-family:'Playfair Display',Georgia,serif;font-size:26px;color:#2b3a26;margin:0 30px 6px 0;font-weight:600;}
+.lb-legal-box h3{font-family:'Open Sans',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:#5f7d5c;font-weight:700;margin:22px 0 6px;}
+.lb-legal-box p{font-size:15px;line-height:1.65;color:#3a4a33;margin:0 0 8px;}
+.lb-legal-box a{color:#c47a5b;}
+@media(max-width:560px){.lb-legal{padding:0;align-items:flex-end;}.lb-legal-box{width:100%;max-height:92vh;border-radius:18px 18px 0 0;padding:26px 20px calc(20px + env(safe-area-inset-bottom,0px));}}
 .lb-rdv.open{display:flex;}
 .lb-rdv-bg{position:absolute;inset:0;background:rgba(20,28,16,.55);backdrop-filter:blur(3px);}
 .lb-rdv-box{position:relative;background:#fff;width:min(520px,100%);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:24px;padding:34px 30px;box-shadow:0 40px 90px -30px rgba(0,0,0,.5);scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.32) transparent;}
@@ -133,6 +145,11 @@ image-slot{touch-action:auto;}
 .rdv-cell{background:#fff;border:1px solid rgba(122,155,118,.45);border-radius:9px;padding:9px 4px;font-family:inherit;font-size:14px;font-weight:600;color:#2b3a26;cursor:pointer;transition:all .15s;text-align:center;}
 .rdv-cell:hover{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
 .rdv-none{color:#c2c8bd;text-align:center;font-size:14px;padding:8px 0;}
+.rdv-seg{background:#eef4ea;border:1px solid rgba(122,155,118,.32);border-radius:9px;padding:9px 4px;font-family:inherit;font-size:13px;font-weight:700;color:#5f7d5c;cursor:pointer;transition:all .15s;text-align:center;}
+.rdv-seg:hover{background:#e3eedd;}
+.rdv-seg.active{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
+.rdv-seg-body{display:none;flex-direction:column;gap:6px;margin-top:6px;}
+.rdv-seg-body.open{display:flex;}
 .rdv-recap{background:#eef4ea;border-radius:12px;padding:12px 16px;font-weight:600;color:#2b3a26;margin-bottom:6px;}
 .lb-rdv-box label{display:block;font-weight:600;font-size:14px;color:#2b3a26;margin:14px 0 6px;}
 .lb-rdv-box input,.lb-rdv-box textarea,.lb-rdv-box select{width:100%;box-sizing:border-box;padding:13px 14px;font-size:16px;font-family:inherit;border:1px solid rgba(122,155,118,.4);border-radius:11px;}
@@ -720,10 +737,36 @@ image-slot{touch-action:auto;}
     </div>
     <div style="margin-top:52px;padding-top:26px;border-top:1px solid rgba(255,255,255,.14);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:14px;color:rgba(255,255,255,.6);">
       <span>© 2026 Laëti'Bienfaits — Laëtitia Ehles.</span>
-      <span>[À COMPLÉTER — mentions légales]</span>
+      <span><a href="#mentions" style="color:inherit;text-decoration:underline;cursor:pointer;" onclick="document.getElementById('lb-legal').classList.add('open');document.body.style.overflow='hidden';return false;">Mentions légales</a></span>
     </div>
   </div>
 </footer>
+
+<!-- ===================== MODALE MENTIONS LÉGALES ===================== -->
+<div class="lb-legal" id="lb-legal" role="dialog" aria-modal="true" aria-label="Mentions légales">
+  <div class="lb-legal-bg" onclick="document.getElementById('lb-legal').classList.remove('open');document.body.style.overflow='';"></div>
+  <div class="lb-legal-box">
+    <button class="lb-legal-close" type="button" aria-label="Fermer" onclick="document.getElementById('lb-legal').classList.remove('open');document.body.style.overflow='';">✕</button>
+    <h2 class="lb-legal-h">Mentions légales</h2>
+    <h3>Éditeur du site</h3>
+    <p>Ce site est édité par <strong>Laëtitia Ehles</strong>, naturopathe et praticienne en kinésiologie, exerçant en entreprise individuelle.<br>
+      Adresse : 37 rue Dom Calmet, 55190 Ménil-la-Horgne<br>
+      Téléphone : <a href="tel:+33673962183">06 73 96 21 83</a> — E-mail : <a href="mailto:laetibienfaits@gmail.com">laetibienfaits@gmail.com</a><br>
+      SIRET : [à compléter] — TVA non applicable, article 293 B du CGI (franchise en base de TVA).</p>
+    <h3>Directrice de la publication</h3>
+    <p>Laëtitia Ehles.</p>
+    <h3>Hébergement</h3>
+    <p>Site hébergé par <strong>Hetzner Online GmbH</strong>, Industriestr. 25, 91710 Gunzenhausen, Allemagne — <a href="https://www.hetzner.com" target="_blank" rel="noopener">www.hetzner.com</a>.</p>
+    <h3>Nature des prestations</h3>
+    <p>La naturopathie et la kinésiologie sont des pratiques de bien-être et d'accompagnement. Elles ne constituent pas un acte médical, ne se substituent en aucun cas à une consultation, un diagnostic ou un traitement médical, et ne remplacent pas l'avis d'un professionnel de santé. Laëtitia Ehles ne pose aucun diagnostic médical et n'invite jamais à interrompre un traitement en cours.</p>
+    <h3>Propriété intellectuelle</h3>
+    <p>L'ensemble des contenus de ce site (textes, photographies, logo, éléments graphiques) est protégé au titre de la propriété intellectuelle et demeure la propriété de Laëtitia Ehles, sauf mention contraire. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation écrite préalable, est interdite.</p>
+    <h3>Données personnelles (RGPD)</h3>
+    <p>Les informations recueillies via le formulaire de demande de rendez-vous (prénom, nom, téléphone, motif) servent uniquement à la gestion de votre demande et de votre rendez-vous. Elles ne sont ni cédées ni vendues à des tiers. Conformément au Règlement général sur la protection des données (RGPD) et à la loi « Informatique et Libertés », vous disposez d'un droit d'accès, de rectification et de suppression de vos données, en écrivant à <a href="mailto:laetibienfaits@gmail.com">laetibienfaits@gmail.com</a>.</p>
+    <h3>Cookies</h3>
+    <p>Ce site ne dépose aucun cookie de suivi ni de mesure d'audience à des fins publicitaires.</p>
+  </div>
+</div>
 
 <!-- ===================== MODAL PRATIQUES ===================== -->
 <div class="lb-modal" id="lb-modal" role="dialog" aria-modal="true" aria-labelledby="lb-modal-title">
@@ -1235,7 +1278,7 @@ function lbHydrate(C){
   if (C.annonce && C.annonce.enabled && C.annonce.text && !document.getElementById('lbe-annonce')){
     var b = document.createElement('div');
     b.id = 'lbe-annonce';
-    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:1090;background:#c47a5b;color:#fff;text-align:center;padding:10px 18px;font-weight:600;font-size:15px;line-height:1.35;';
+    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:1090;background:#c47a5b;color:#fff;text-align:center;padding:11px 18px;font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:13px;line-height:1.4;";
     b.textContent = C.annonce.text;
     document.body.appendChild(b);
     var hdr = document.querySelector('header');
@@ -1286,9 +1329,15 @@ function lbRdvWidget(){
         +'<div class="rdv-week" id="rdv-week">';
       cols.forEach(function(ds){
         h+='<div class="rdv-col" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>';
-        var slots=map[ds];
-        if(slots&&slots.length){ slots.forEach(function(t){ h+='<button class="rdv-cell" type="button" data-d="'+ds+'" data-t="'+t+'">'+t+'</button>'; }); }
-        else { h+='<div class="rdv-none">—</div>'; }
+        var slots=map[ds]||[];
+        var am=slots.filter(function(t){return parseInt(t,10)<12;}), pm=slots.filter(function(t){return parseInt(t,10)>=12;});
+        if(!slots.length){ h+='<div class="rdv-none">—</div>'; }
+        else { [['am','Matin',am],['pm','Après-midi',pm]].forEach(function(sg){
+          if(!sg[2].length) return;
+          h+='<button class="rdv-seg" type="button" data-seg="'+sg[0]+'">'+sg[1]+'</button><div class="rdv-seg-body" data-segbody="'+sg[0]+'">';
+          sg[2].forEach(function(t){ h+='<button class="rdv-cell" type="button" data-d="'+ds+'" data-t="'+t+'">'+t+'</button>'; });
+          h+='</div>';
+        }); }
         h+='</div>';
       });
       h+='</div>';
@@ -1308,6 +1357,7 @@ function lbRdvWidget(){
       var raf=null;
       track.addEventListener('scroll',function(){ if(raf) return; raf=requestAnimationFrame(function(){ raf=null; syncNav(); }); });
       body.querySelectorAll('.rdv-cell').forEach(function(b){ b.onclick=function(){ S.date=b.dataset.d; S.time=b.dataset.t; stepForm(); }; });
+      body.querySelectorAll('.rdv-seg').forEach(function(sg){ sg.onclick=function(){ var col=sg.parentNode, key=sg.getAttribute('data-seg'), bd=col.querySelector('[data-segbody="'+key+'"]'), wasOpen=bd.classList.contains('open'); col.querySelectorAll('.rdv-seg-body').forEach(function(x){ x.classList.remove('open'); }); col.querySelectorAll('.rdv-seg').forEach(function(x){ x.classList.remove('active'); }); if(!wasOpen){ bd.classList.add('open'); sg.classList.add('active'); } }; });
       syncNav();
     }).catch(function(){ body.innerHTML='<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; });
   }
