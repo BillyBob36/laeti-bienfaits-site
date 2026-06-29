@@ -145,6 +145,8 @@ image-slot{touch-action:auto;}
 .rdv-cell{background:#fff;border:1px solid rgba(122,155,118,.45);border-radius:9px;padding:9px 4px;font-family:inherit;font-size:14px;font-weight:600;color:#2b3a26;cursor:pointer;transition:all .15s;text-align:center;}
 .rdv-cell:hover{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
 .rdv-none{color:#c2c8bd;text-align:center;font-size:14px;padding:8px 0;}
+.rdv-off{color:#a9b2a1;text-align:center;font-size:11.5px;line-height:1.3;padding:10px 2px;font-style:italic;}
+.rdv-col-off{opacity:.85;}
 .rdv-seg{background:#eef4ea;border:1px solid rgba(122,155,118,.32);border-radius:9px;padding:9px 4px;font-family:inherit;font-size:13px;font-weight:700;color:#5f7d5c;cursor:pointer;transition:all .15s;text-align:center;}
 .rdv-seg:hover{background:#e3eedd;}
 .rdv-seg.active{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
@@ -1410,11 +1412,16 @@ function lbRdvWidget(){
     else { for(var k=cols.length-1;k>=0;k--){ if(cols[k].getAttribute('data-date')<=td){ target=cols[k]; break; } } target=target||cols[0]; }
     track.scrollTo({left:target.offsetLeft, behavior:'smooth'});
   }
+  function monthRange(ym){ var p=ym.split('-'), y=parseInt(p[0],10), m=parseInt(p[1],10), nb=new Date(y,m,0).getDate(), today=ymd(new Date()); var first=ym+'-01', from=(first<today?today:first); return {from:from, to:ym+'-'+pad2(nb)}; }
   function bandHtml(map){
-    var dates=Object.keys(map).sort();
-    if(!dates.length) return '<p class="rdv-empty">Aucun créneau ce mois-ci. Choisissez un autre mois ci-dessus, ou appelez le 06 73 96 21 83.</p>';
+    var r=monthRange(S.viewMonth), cols=[], cur=r.from, guard=0;
+    while(cur<=r.to && guard<40){ cols.push(cur); cur=addDays(cur,1); guard++; }
+    if(!cols.length) return '<p class="rdv-empty">Choisissez un autre mois ci-dessus.</p>';
     var h='<div class="rdv-week" id="rdv-week">';
-    dates.forEach(function(ds){ h+='<div class="rdv-col" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+slotsBlock(ds,map[ds])+'</div>'; });
+    cols.forEach(function(ds){
+      var has=map[ds]&&map[ds].length;
+      h+='<div class="rdv-col'+(has?'':' rdv-col-off')+'" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+(has?slotsBlock(ds,map[ds]):'<div class="rdv-off">Indisponible</div>')+'</div>';
+    });
     return h+'</div>';
   }
   function stepSlot(){ if(!S.viewMonth) S.viewMonth=curMonth(); renderSlot(); }
