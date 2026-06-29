@@ -131,17 +131,16 @@ image-slot{touch-action:auto;}
 .rdv-skip{margin-top:14px;background:transparent;border:0;color:#6f7c69;text-decoration:underline;cursor:pointer;font-family:inherit;font-size:14px;}
 .rdv-week-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
 .rdv-mois{font-weight:700;color:#5f7d5c;font-size:15px;text-align:center;flex:1;}
-.rdv-week-arrow{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid rgba(122,155,118,.4);background:#fff;color:#2b3a26;cursor:pointer;display:grid;place-items:center;font-size:20px;line-height:1;transition:background .15s,opacity .15s;}
+.rdv-week-arrow{width:28px;height:28px;flex:none;border-radius:50%;border:1px solid rgba(122,155,118,.4);background:#fff;color:#2b3a26;cursor:pointer;display:grid;place-items:center;font-size:15px;line-height:1;transition:background .15s,opacity .15s;}
 .rdv-week-arrow:hover:not(:disabled){background:#eef4ea;}
 .rdv-week-arrow:disabled{opacity:.32;cursor:default;}
-.rdv-week{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.32) transparent;}
-.rdv-week::-webkit-scrollbar{height:7px;}
-.rdv-week::-webkit-scrollbar-track{background:transparent;}
-.rdv-week::-webkit-scrollbar-thumb{background:rgba(122,155,118,.32);border-radius:99px;border:2px solid transparent;background-clip:padding-box;}
+.rdv-week{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;}
+.rdv-week::-webkit-scrollbar{display:none;}
 .rdv-col{flex:0 0 84px;scroll-snap-align:start;display:flex;flex-direction:column;gap:7px;}
 .rdv-col-hd{text-align:center;font-size:12px;color:#6f7c69;line-height:1.2;padding-bottom:7px;border-bottom:1px solid rgba(122,155,118,.22);}
 .rdv-dow{text-transform:capitalize;}
 .rdv-col-hd b{display:block;font-size:17px;color:#2b3a26;font-weight:700;margin-top:2px;}
+.rdv-mon{display:block;font-size:10px;color:#8a9382;text-transform:lowercase;margin-top:1px;letter-spacing:.2px;}
 .rdv-cell{background:#fff;border:1px solid rgba(122,155,118,.45);border-radius:9px;padding:9px 4px;font-family:inherit;font-size:14px;font-weight:600;color:#2b3a26;cursor:pointer;transition:all .15s;text-align:center;}
 .rdv-cell:hover{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
 .rdv-none{color:#c2c8bd;text-align:center;font-size:14px;padding:8px 0;}
@@ -152,12 +151,14 @@ image-slot{touch-action:auto;}
 .rdv-seg.active{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
 .rdv-seg-body{display:none;flex-direction:column;gap:6px;margin-top:6px;}
 .rdv-seg-body.open{display:flex;}
+.rdv-seg-off{background:#f4f6f2;border:1px dashed rgba(122,155,118,.3);border-radius:9px;padding:9px 4px;font-size:11px;font-weight:600;font-style:italic;color:#aab3a2;cursor:default;text-align:center;}
+.rdv-seg-off:hover{background:#f4f6f2;}
 .rdv-modesw{display:flex;align-items:center;gap:8px;font-size:13px;color:#6f7c69;margin-bottom:14px;flex-wrap:wrap;}
 .rdv-modebtn{background:#f7f3ed;border:1px solid rgba(122,155,118,.3);border-radius:999px;padding:6px 13px;font-family:inherit;font-size:13px;font-weight:600;color:#5f7d5c;cursor:pointer;transition:all .15s;}
 .rdv-modebtn.on{background:#5f7d5c;color:#fff;border-color:#5f7d5c;}
-.rdv-monthnav{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;}
-.rdv-msel{display:flex;gap:6px;}
-.rdv-msel select{font-family:inherit;font-size:15px;font-weight:600;color:#2b3a26;padding:7px 10px;border:1px solid rgba(122,155,118,.4);border-radius:10px;background:#fff;cursor:pointer;}
+.rdv-monthnav{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:12px;}
+.rdv-msel{display:flex;gap:5px;}
+.rdv-msel select{font-family:inherit;font-size:13px;font-weight:600;color:#2b3a26;padding:4px 8px;border:1px solid rgba(122,155,118,.4);border-radius:8px;background:#fff;cursor:pointer;}
 .rdv-cal-hd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;}
 .rdv-cal-hd span{text-align:center;font-size:12px;font-weight:700;color:#6f7c69;}
 .rdv-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
@@ -1363,6 +1364,7 @@ function lbRdvWidget(){
   function pad2(n){ return (n<10?'0':'')+n; }
   function ymd(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
   function dowShort(ds){ try{ return new Date(ds+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short'}).replace(/\.$/,''); }catch(e){ return ''; } }
+  function monShort(ds){ try{ return new Date(ds+'T12:00:00').toLocaleDateString('fr-FR',{month:'short'}).replace(/\.$/,''); }catch(e){ return ''; } }
   function dayNum(ds){ return String(parseInt(ds.slice(8,10),10)); }
   var MOISFR=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
   function curMonth(){ var d=new Date(); return d.getFullYear()+'-'+pad2(d.getMonth()+1); }
@@ -1372,7 +1374,7 @@ function lbRdvWidget(){
   function slotsBlock(ds, slots){
     var am=slots.filter(function(t){return parseInt(t,10)<12;}), pm=slots.filter(function(t){return parseInt(t,10)>=12;}), h='';
     [['am','Matin',am],['pm','Après-midi',pm]].forEach(function(sg){
-      if(!sg[2].length) return;
+      if(!sg[2].length){ h+='<div class="rdv-seg rdv-seg-off">Indisponible</div>'; return; }
       h+='<button class="rdv-seg" type="button" data-seg="'+sg[0]+'">'+sg[1]+'</button><div class="rdv-seg-body" data-segbody="'+sg[0]+'">';
       sg[2].forEach(function(t){ h+='<button class="rdv-cell" type="button" data-d="'+ds+'" data-t="'+t+'">'+t+'</button>'; });
       h+='</div>';
@@ -1380,7 +1382,7 @@ function lbRdvWidget(){
     return h||'<div class="rdv-none">—</div>';
   }
   function wireSegs(scope){
-    scope.querySelectorAll('.rdv-seg').forEach(function(sg){ sg.onclick=function(){ var col=sg.parentNode, key=sg.getAttribute('data-seg'), bd=col.querySelector('[data-segbody="'+key+'"]'), was=bd.classList.contains('open'); col.querySelectorAll('.rdv-seg-body').forEach(function(x){ x.classList.remove('open'); }); col.querySelectorAll('.rdv-seg').forEach(function(x){ x.classList.remove('active'); }); if(!was){ bd.classList.add('open'); sg.classList.add('active'); } }; });
+    scope.querySelectorAll('.rdv-seg:not(.rdv-seg-off)').forEach(function(sg){ sg.onclick=function(){ var col=sg.parentNode, key=sg.getAttribute('data-seg'), bd=col.querySelector('[data-segbody="'+key+'"]'), was=bd.classList.contains('open'); col.querySelectorAll('.rdv-seg-body').forEach(function(x){ x.classList.remove('open'); }); col.querySelectorAll('.rdv-seg').forEach(function(x){ x.classList.remove('active'); }); if(!was){ bd.classList.add('open'); sg.classList.add('active'); } }; });
     scope.querySelectorAll('.rdv-cell').forEach(bindCell);
   }
   function navHtml(){
@@ -1402,14 +1404,20 @@ function lbRdvWidget(){
   function weekStep(dir){ var track=body.querySelector('#rdv-week'); if(!track||!track.children.length) return; var cw=track.children[0].offsetWidth+8; track.scrollBy({left:dir*cw*7, behavior:'smooth'}); setTimeout(maybeLoadMore, 350); }
   function monthRange(ym){ var p=ym.split('-'), y=parseInt(p[0],10), m=parseInt(p[1],10), nb=new Date(y,m,0).getDate(), today=ymd(new Date()); var first=ym+'-01', from=(first<today?today:first); return {from:from, to:ym+'-'+pad2(nb)}; }
   function monthDays(ym){ var r=monthRange(ym), cols=[], cur=r.from, g=0; while(cur<=r.to && g<40){ cols.push(cur); cur=addDays(cur,1); g++; } return cols; }
-  function colHtml(ds){ var slots=S.map[ds], has=slots&&slots.length; return '<div class="rdv-col'+(has?'':' rdv-col-off')+'" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+(has?slotsBlock(ds,slots):'<div class="rdv-off">Indisponible</div>')+'</div>'; }
+  function colHtml(ds){ var slots=S.map[ds]||[], has=slots.length; return '<div class="rdv-col'+(has?'':' rdv-col-off')+'" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b><span class="rdv-mon">'+monShort(ds)+'</span></div>'+slotsBlock(ds,slots)+'</div>'; }
   function fetchMonth(ym){ return fetch(LB_API+'/api/slots?duration='+S.duration+'&month='+ym).then(function(r){return r.json();}).then(function(d){ (d.days||[]).forEach(function(x){ S.map[x.date]=x.slots; }); }); }
   function syncMonthSelect(){
     var track=body.querySelector('#rdv-week'); if(!track||!track.children.length) return;
-    var sl=track.scrollLeft, kids=track.children, ds=null;
-    for(var i=0;i<kids.length;i++){ if(kids[i].offsetLeft+kids[i].offsetWidth>sl+4){ ds=kids[i].getAttribute('data-date'); break; } }
-    if(!ds) return; var ym=ds.slice(0,7);
-    if(ym!==S.viewMonth){ S.viewMonth=ym; var sm=body.querySelector('#rdv-selm'), sy=body.querySelector('#rdv-sely'); if(sm) sm.value=ym.slice(5,7); if(sy) sy.value=ym.slice(0,4); }
+    var sl=track.scrollLeft, vr=sl+track.clientWidth, kids=track.children, counts={}, best=null, bestN=0;
+    for(var i=0;i<kids.length;i++){
+      var L=kids[i].offsetLeft, R=L+kids[i].offsetWidth, vis=Math.min(R,vr)-Math.max(L,sl);
+      if(vis<=4) continue;
+      var ym=kids[i].getAttribute('data-date').slice(0,7), n=(counts[ym]||0)+1; counts[ym]=n;
+      if(n>bestN){ bestN=n; best=ym; }
+    }
+    if(!best || best===S.viewMonth) return;
+    S.viewMonth=best; var sm=body.querySelector('#rdv-selm'), sy=body.querySelector('#rdv-sely');
+    if(sm) sm.value=best.slice(5,7); if(sy) sy.value=best.slice(0,4);
   }
   function maybeLoadMore(){
     var track=body.querySelector('#rdv-week'); if(!track||S.loading) return;
