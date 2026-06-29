@@ -1404,6 +1404,13 @@ function lbRdvWidget(){
   function monthDays(ym){ var r=monthRange(ym), cols=[], cur=r.from, g=0; while(cur<=r.to && g<40){ cols.push(cur); cur=addDays(cur,1); g++; } return cols; }
   function colHtml(ds){ var slots=S.map[ds], has=slots&&slots.length; return '<div class="rdv-col'+(has?'':' rdv-col-off')+'" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+(has?slotsBlock(ds,slots):'<div class="rdv-off">Indisponible</div>')+'</div>'; }
   function fetchMonth(ym){ return fetch(LB_API+'/api/slots?duration='+S.duration+'&month='+ym).then(function(r){return r.json();}).then(function(d){ (d.days||[]).forEach(function(x){ S.map[x.date]=x.slots; }); }); }
+  function syncMonthSelect(){
+    var track=body.querySelector('#rdv-week'); if(!track||!track.children.length) return;
+    var sl=track.scrollLeft, kids=track.children, ds=null;
+    for(var i=0;i<kids.length;i++){ if(kids[i].offsetLeft+kids[i].offsetWidth>sl+4){ ds=kids[i].getAttribute('data-date'); break; } }
+    if(!ds) return; var ym=ds.slice(0,7);
+    if(ym!==S.viewMonth){ S.viewMonth=ym; var sm=body.querySelector('#rdv-selm'), sy=body.querySelector('#rdv-sely'); if(sm) sm.value=ym.slice(5,7); if(sy) sy.value=ym.slice(0,4); }
+  }
   function maybeLoadMore(){
     var track=body.querySelector('#rdv-week'); if(!track||S.loading) return;
     if(track.scrollLeft+track.clientWidth < track.scrollWidth-400) return;
@@ -1418,7 +1425,7 @@ function lbRdvWidget(){
     fetchMonth(S.viewMonth).then(function(){
       body.innerHTML=head+navHtml()+'<div class="rdv-week" id="rdv-week">'+monthDays(S.viewMonth).map(colHtml).join('')+'</div>'; wireNav();
       var track=body.querySelector('#rdv-week'); wireSegs(track);
-      track.addEventListener('scroll', function(){ if(S._raf) return; S._raf=requestAnimationFrame(function(){ S._raf=null; maybeLoadMore(); }); });
+      track.addEventListener('scroll', function(){ if(S._raf) return; S._raf=requestAnimationFrame(function(){ S._raf=null; syncMonthSelect(); maybeLoadMore(); }); });
       maybeLoadMore();
     }).catch(function(){ body.innerHTML=head+navHtml()+'<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; wireNav(); });
   }
