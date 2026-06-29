@@ -1393,45 +1393,33 @@ function lbRdvWidget(){
   }
   function wireNav(){
     var sm=body.querySelector('#rdv-selm'), sy=body.querySelector('#rdv-sely');
-    function jump(){ var nm=sy.value+'-'+sm.value; if(nm<curMonth()) nm=curMonth(); S.viewMonth=nm; S.scrollEnd=false; renderSlot(); }
+    function jump(){ var nm=sy.value+'-'+sm.value; if(nm<curMonth()) nm=curMonth(); S.viewMonth=nm; renderSlot(); }
     if(sm) sm.onchange=jump; if(sy) sy.onchange=jump;
     var pv=body.querySelector('[data-wprev]'), nx=body.querySelector('[data-wnext]');
     if(pv) pv.onclick=function(){ weekStep(-1); };
     if(nx) nx.onclick=function(){ weekStep(1); };
   }
-  function weekStep(dir){
-    var track=body.querySelector('#rdv-week');
-    if(!track){ if(dir>0){ S.viewMonth=monthShift(S.viewMonth,1); renderSlot(); } else { var z=monthShift(S.viewMonth,-1); if(z>=curMonth()){ S.viewMonth=z; renderSlot(); } } return; }
-    var atStart=track.scrollLeft<=2, atEnd=track.scrollLeft+track.clientWidth>=track.scrollWidth-2;
-    if(dir>0 && atEnd){ S.viewMonth=monthShift(S.viewMonth,1); S.scrollEnd=false; renderSlot(); return; }
-    if(dir<0 && atStart){ var nm=monthShift(S.viewMonth,-1); if(nm>=curMonth()){ S.viewMonth=nm; S.scrollEnd=true; renderSlot(); } return; }
-    var cols=Array.prototype.slice.call(track.children), sl=track.scrollLeft, fv=cols[0];
-    for(var i=0;i<cols.length;i++){ if(cols[i].offsetLeft+cols[i].offsetWidth>sl+4){ fv=cols[i]; break; } }
-    var td=addDays(fv.getAttribute('data-date'), dir*7), target=null;
-    if(dir>0){ for(var j=0;j<cols.length;j++){ if(cols[j].getAttribute('data-date')>=td){ target=cols[j]; break; } } target=target||cols[cols.length-1]; }
-    else { for(var k=cols.length-1;k>=0;k--){ if(cols[k].getAttribute('data-date')<=td){ target=cols[k]; break; } } target=target||cols[0]; }
-    track.scrollTo({left:target.offsetLeft, behavior:'smooth'});
-  }
+  function weekStep(dir){ var track=body.querySelector('#rdv-week'); if(!track||!track.children.length) return; var cw=track.children[0].offsetWidth+8; track.scrollBy({left:dir*cw*7, behavior:'smooth'}); setTimeout(maybeLoadMore, 350); }
   function monthRange(ym){ var p=ym.split('-'), y=parseInt(p[0],10), m=parseInt(p[1],10), nb=new Date(y,m,0).getDate(), today=ymd(new Date()); var first=ym+'-01', from=(first<today?today:first); return {from:from, to:ym+'-'+pad2(nb)}; }
-  function bandHtml(map){
-    var r=monthRange(S.viewMonth), cols=[], cur=r.from, guard=0;
-    while(cur<=r.to && guard<40){ cols.push(cur); cur=addDays(cur,1); guard++; }
-    if(!cols.length) return '<p class="rdv-empty">Choisissez un autre mois ci-dessus.</p>';
-    var h='<div class="rdv-week" id="rdv-week">';
-    cols.forEach(function(ds){
-      var has=map[ds]&&map[ds].length;
-      h+='<div class="rdv-col'+(has?'':' rdv-col-off')+'" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+(has?slotsBlock(ds,map[ds]):'<div class="rdv-off">Indisponible</div>')+'</div>';
-    });
-    return h+'</div>';
+  function monthDays(ym){ var r=monthRange(ym), cols=[], cur=r.from, g=0; while(cur<=r.to && g<40){ cols.push(cur); cur=addDays(cur,1); g++; } return cols; }
+  function colHtml(ds){ var slots=S.map[ds], has=slots&&slots.length; return '<div class="rdv-col'+(has?'':' rdv-col-off')+'" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+(has?slotsBlock(ds,slots):'<div class="rdv-off">Indisponible</div>')+'</div>'; }
+  function fetchMonth(ym){ return fetch(LB_API+'/api/slots?duration='+S.duration+'&month='+ym).then(function(r){return r.json();}).then(function(d){ (d.days||[]).forEach(function(x){ S.map[x.date]=x.slots; }); }); }
+  function maybeLoadMore(){
+    var track=body.querySelector('#rdv-week'); if(!track||S.loading) return;
+    if(track.scrollLeft+track.clientWidth < track.scrollWidth-400) return;
+    S.loading=true; var nm=monthShift(S.loadedThrough,1);
+    fetchMonth(nm).then(function(){ S.loadedThrough=nm; track.insertAdjacentHTML('beforeend', monthDays(nm).map(colHtml).join('')); wireSegs(track); S.loading=false; maybeLoadMore(); }).catch(function(){ S.loading=false; });
   }
   function stepSlot(){ if(!S.viewMonth) S.viewMonth=curMonth(); renderSlot(); }
   function renderSlot(){
     var head='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3>';
     body.innerHTML=head+navHtml()+'<p class="rdv-load">Recherche des disponibilités…</p>'; wireNav();
-    fetch(LB_API+'/api/slots?duration='+S.duration+'&month='+S.viewMonth).then(function(r){return r.json();}).then(function(d){
-      var map={}; (d.days||[]).forEach(function(x){ map[x.date]=x.slots; });
-      body.innerHTML=head+navHtml()+bandHtml(map); wireNav(); wireSegs(body);
-      if(S.scrollEnd){ var tr=body.querySelector('#rdv-week'); if(tr) tr.scrollLeft=tr.scrollWidth; S.scrollEnd=false; }
+    S.map={}; S.loadedThrough=S.viewMonth; S.loading=false;
+    fetchMonth(S.viewMonth).then(function(){
+      body.innerHTML=head+navHtml()+'<div class="rdv-week" id="rdv-week">'+monthDays(S.viewMonth).map(colHtml).join('')+'</div>'; wireNav();
+      var track=body.querySelector('#rdv-week'); wireSegs(track);
+      track.addEventListener('scroll', function(){ if(S._raf) return; S._raf=requestAnimationFrame(function(){ S._raf=null; maybeLoadMore(); }); });
+      maybeLoadMore();
     }).catch(function(){ body.innerHTML=head+navHtml()+'<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; wireNav(); });
   }
   function stepForm(){
