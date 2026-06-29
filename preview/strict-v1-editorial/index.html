@@ -170,6 +170,37 @@ image-slot{touch-action:auto;}
 .rdv-cal-date{font-weight:700;color:#5f7d5c;margin-bottom:10px;text-transform:capitalize;}
 .rdv-cal-slots .rdv-seg-body.open{flex-direction:row;flex-wrap:wrap;gap:8px;}
 .rdv-cal-slots .rdv-cell{flex:0 0 auto;min-width:74px;}
+.rdv-half{display:flex;align-items:flex-start;gap:10px;margin:6px 0;}
+.rdv-half-l{flex:none;width:78px;font-size:13px;color:#6f7c69;padding-top:9px;}
+.rdv-chips{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-width:0;}
+.lv{display:flex;flex-direction:column;}
+.lv-day{padding:12px 2px;border-bottom:1px solid rgba(122,155,118,.18);}
+.lv-day:last-child{border-bottom:0;}
+.lv-date{font-weight:700;color:#5f7d5c;margin-bottom:8px;text-transform:capitalize;}
+.wk-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
+.wk-label{font-weight:700;color:#2b3a26;font-size:15px;min-width:150px;text-align:center;}
+.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.wk-col{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.wk-colh{text-align:center;font-size:11.5px;color:#6f7c69;line-height:1.2;padding-bottom:6px;border-bottom:1px solid rgba(122,155,118,.22);}
+.wk-colh span{text-transform:capitalize;}
+.wk-colh b{display:block;font-size:16px;color:#2b3a26;margin-top:2px;}
+.wk-slots{display:flex;flex-direction:column;gap:5px;}
+.wk-slots .rdv-cell{padding:7px 2px;font-size:13px;}
+.d3-days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:rgba(122,155,118,.32) transparent;}
+.d3-pill{flex:0 0 auto;background:#f7f3ed;border:1px solid rgba(122,155,118,.3);border-radius:12px;padding:8px 12px;font-family:inherit;cursor:pointer;text-align:center;color:#2b3a26;min-width:56px;transition:all .15s;}
+.d3-pill span{display:block;font-size:11px;color:#6f7c69;text-transform:capitalize;}
+.d3-pill b{display:block;font-size:18px;line-height:1.1;}
+.d3-pill i{display:block;font-size:10px;color:#9aa896;font-style:normal;}
+.d3-pill.on{background:#5f7d5c;border-color:#5f7d5c;color:#fff;}
+.d3-pill.on span,.d3-pill.on i{color:rgba(255,255,255,.85);}
+.d3-slots{margin-top:14px;}
+@media(max-width:560px){
+  .rdv-half{flex-direction:column;gap:4px;}
+  .rdv-half-l{width:auto;padding-top:0;}
+  .wk-grid{display:flex;overflow-x:auto;gap:6px;padding-bottom:6px;}
+  .wk-col{flex:0 0 66px;}
+  .wk-slots .rdv-cell{padding:6px 1px;font-size:12px;}
+}
 .rdv-recap{background:#eef4ea;border-radius:12px;padding:12px 16px;font-weight:600;color:#2b3a26;margin-bottom:6px;}
 .lb-rdv-box label{display:block;font-weight:600;font-size:14px;color:#2b3a26;margin:14px 0 6px;}
 .lb-rdv-box input,.lb-rdv-box textarea,.lb-rdv-box select{width:100%;box-sizing:border-box;padding:13px 14px;font-size:16px;font-family:inherit;border:1px solid rgba(122,155,118,.4);border-radius:11px;}
@@ -1334,67 +1365,76 @@ function lbRdvWidget(){
   var MOISFR=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
   function curMonth(){ var d=new Date(); return d.getFullYear()+'-'+pad2(d.getMonth()+1); }
   function monthShift(ym,n){ var p=ym.split('-'); var d=new Date(parseInt(p[0],10), parseInt(p[1],10)-1+n, 1); return d.getFullYear()+'-'+pad2(d.getMonth()+1); }
+  var MOISAB=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
   function bindCell(b){ b.onclick=function(){ S.date=b.dataset.d; S.time=b.dataset.t; stepForm(); }; }
-  function slotsBlock(ds, slots){
+  function cellHtml(ds,t){ return '<button class="rdv-cell" type="button" data-d="'+ds+'" data-t="'+t+'">'+t+'</button>'; }
+  function wireCells(scope){ if(scope) scope.querySelectorAll('.rdv-cell').forEach(bindCell); }
+  function slotsGrouped(ds, slots){
     var am=slots.filter(function(t){return parseInt(t,10)<12;}), pm=slots.filter(function(t){return parseInt(t,10)>=12;}), h='';
-    [['am','Matin',am],['pm','Après-midi',pm]].forEach(function(sg){
-      if(!sg[2].length) return;
-      h+='<button class="rdv-seg" type="button" data-seg="'+sg[0]+'">'+sg[1]+'</button><div class="rdv-seg-body" data-segbody="'+sg[0]+'">';
-      sg[2].forEach(function(t){ h+='<button class="rdv-cell" type="button" data-d="'+ds+'" data-t="'+t+'">'+t+'</button>'; });
-      h+='</div>';
-    });
-    return h;
+    if(am.length) h+='<div class="rdv-half"><span class="rdv-half-l">Matin</span><div class="rdv-chips">'+am.map(function(t){return cellHtml(ds,t);}).join('')+'</div></div>';
+    if(pm.length) h+='<div class="rdv-half"><span class="rdv-half-l">Après-midi</span><div class="rdv-chips">'+pm.map(function(t){return cellHtml(ds,t);}).join('')+'</div></div>';
+    return h||'<div class="rdv-none">—</div>';
   }
-  function wireSegs(scope){
-    scope.querySelectorAll('.rdv-seg').forEach(function(sg){ sg.onclick=function(){ var col=sg.parentNode, key=sg.getAttribute('data-seg'), bd=col.querySelector('[data-segbody="'+key+'"]'), was=bd.classList.contains('open'); col.querySelectorAll('.rdv-seg-body').forEach(function(x){ x.classList.remove('open'); }); col.querySelectorAll('.rdv-seg').forEach(function(x){ x.classList.remove('active'); }); if(!was){ bd.classList.add('open'); sg.classList.add('active'); } }; });
-    scope.querySelectorAll('.rdv-cell').forEach(bindCell);
-  }
+  function emptyHtml(){ return '<p class="rdv-empty">Aucun créneau ce mois-ci. Choisissez un autre mois ci-dessus, ou appelez le 06 73 96 21 83.</p>'; }
   function navHtml(){
     var now=curMonth(), minY=parseInt(now.slice(0,4),10), s=S.viewMonth.split('-'), selM=parseInt(s[1],10), selY=parseInt(s[0],10), mo='', yo='';
     for(var m=1;m<=12;m++) mo+='<option value="'+pad2(m)+'"'+(m===selM?' selected':'')+'>'+MOISFR[m-1]+'</option>';
     for(var y=minY;y<=minY+10;y++) yo+='<option value="'+y+'"'+(y===selY?' selected':'')+'>'+y+'</option>';
-    return '<div class="rdv-modesw">Affichage : <button type="button" class="rdv-modebtn'+(S.mode==='cal'?' on':'')+'" data-mode="cal">📅 Calendrier</button><button type="button" class="rdv-modebtn'+(S.mode==='band'?' on':'')+'" data-mode="band">📋 Liste</button></div>'
-      +'<div class="rdv-monthnav"><button type="button" class="rdv-week-arrow" data-mprev aria-label="Mois précédent"'+(S.viewMonth>now?'':' disabled')+'>‹</button>'
-      +'<span class="rdv-msel"><select id="rdv-selm" aria-label="Mois">'+mo+'</select><select id="rdv-sely" aria-label="Année">'+yo+'</select></span>'
-      +'<button type="button" class="rdv-week-arrow" data-mnext aria-label="Mois suivant">›</button></div>';
+    var modes=[['v1','V1 · Liste'],['v2','V2 · Semaine'],['v3','V3 · Pastilles']];
+    var sw='<div class="rdv-modesw">Version&nbsp;test : '+modes.map(function(mm){return '<button type="button" class="rdv-modebtn'+(S.mode===mm[0]?' on':'')+'" data-mode="'+mm[0]+'">'+mm[1]+'</button>';}).join('')+'</div>';
+    return sw+'<div class="rdv-monthnav"><span class="rdv-msel"><select id="rdv-selm" aria-label="Mois">'+mo+'</select><select id="rdv-sely" aria-label="Année">'+yo+'</select></span></div>';
   }
   function wireNav(){
-    var pv=body.querySelector('[data-mprev]'), nx=body.querySelector('[data-mnext]'), sm=body.querySelector('#rdv-selm'), sy=body.querySelector('#rdv-sely');
-    if(pv) pv.onclick=function(){ var nm=monthShift(S.viewMonth,-1); if(nm>=curMonth()){ S.viewMonth=nm; S.daySel=null; renderSlot(); } };
-    if(nx) nx.onclick=function(){ S.viewMonth=monthShift(S.viewMonth,1); S.daySel=null; renderSlot(); };
-    function jump(){ var nm=sy.value+'-'+sm.value; if(nm<curMonth()) nm=curMonth(); S.viewMonth=nm; S.daySel=null; renderSlot(); }
+    var sm=body.querySelector('#rdv-selm'), sy=body.querySelector('#rdv-sely');
+    function jump(){ var nm=sy.value+'-'+sm.value; if(nm<curMonth()) nm=curMonth(); S.viewMonth=nm; S.daySel=null; S.weekIdx=null; renderSlot(); }
     if(sm) sm.onchange=jump; if(sy) sy.onchange=jump;
     body.querySelectorAll('.rdv-modebtn').forEach(function(b){ b.onclick=function(){ S.mode=b.getAttribute('data-mode'); renderSlot(); }; });
   }
-  function bandHtml(map){
-    var dates=Object.keys(map).sort();
-    if(!dates.length) return '<p class="rdv-empty">Aucun créneau ce mois-ci. Choisissez un autre mois, ou appelez le 06 73 96 21 83.</p>';
-    var h='<div class="rdv-week" id="rdv-week">';
-    dates.forEach(function(ds){ h+='<div class="rdv-col" data-date="'+ds+'"><div class="rdv-col-hd"><span class="rdv-dow">'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+slotsBlock(ds,map[ds])+'</div>'; });
+  function v1Html(map){
+    var dates=Object.keys(map).sort(); if(!dates.length) return emptyHtml();
+    var h='<div class="lv">';
+    dates.forEach(function(ds){ h+='<div class="lv-day"><div class="lv-date">'+frDate(ds)+'</div>'+slotsGrouped(ds,map[ds])+'</div>'; });
     return h+'</div>';
   }
-  function calHtml(map){
-    var p=S.viewMonth.split('-'), y=parseInt(p[0],10), m=parseInt(p[1],10);
-    var firstDow=(new Date(y,m-1,1).getDay()+6)%7, nb=new Date(y,m,0).getDate(), today=ymd(new Date());
-    var h='<div class="rdv-cal"><div class="rdv-cal-hd"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="rdv-cal-grid">';
-    for(var i=0;i<firstDow;i++) h+='<span class="rdv-cal-empty"></span>';
-    for(var dd=1;dd<=nb;dd++){ var ds=y+'-'+pad2(m)+'-'+pad2(dd); var has=map[ds]&&map[ds].length; h+='<button type="button" class="rdv-cal-day'+(has?' has':' off')+(ds===today?' today':'')+'"'+(has?' data-day="'+ds+'"':' disabled')+'>'+dd+'</button>'; }
-    return h+'</div></div><div class="rdv-cal-slots" id="rdv-cal-slots"></div>';
+  function monthWeeks(ym){
+    var p=ym.split('-'), y=parseInt(p[0],10), m=parseInt(p[1],10), nb=new Date(y,m,0).getDate();
+    var startDow=(new Date(y,m-1,1).getDay()+6)%7, ws=new Date(y,m-1,1-startDow), weeks=[], guard=0, last=y+'-'+pad2(m)+'-'+pad2(nb);
+    while(guard<8){ guard++; var wk=[]; for(var i=0;i<7;i++){ var dd=new Date(ws); dd.setDate(ws.getDate()+i); wk.push(ymd(dd)); } weeks.push(wk); ws.setDate(ws.getDate()+7); if(wk[6]>=last) break; }
+    return weeks;
   }
-  function wireCal(map){
-    var zone=body.querySelector('#rdv-cal-slots');
-    function show(ds){ S.daySel=ds; body.querySelectorAll('.rdv-cal-day').forEach(function(b){ b.classList.toggle('sel', b.getAttribute('data-day')===ds); }); zone.innerHTML='<div class="rdv-cal-date">'+frDate(ds)+'</div>'+slotsBlock(ds, map[ds]||[]); wireSegs(zone); }
-    body.querySelectorAll('.rdv-cal-day[data-day]').forEach(function(b){ b.onclick=function(){ show(b.getAttribute('data-day')); }; });
-    var avail=Object.keys(map).sort(); if(avail.length) show(S.daySel && map[S.daySel] ? S.daySel : avail[0]);
+  function v2Html(map){
+    var weeks=monthWeeks(S.viewMonth);
+    if(S.weekIdx==null||S.weekIdx<0) S.weekIdx=0; if(S.weekIdx>=weeks.length) S.weekIdx=weeks.length-1;
+    var wk=weeks[S.weekIdx];
+    var label=dayNum(wk[0])+' '+MOISAB[parseInt(wk[0].slice(5,7),10)-1]+' – '+dayNum(wk[6])+' '+MOISAB[parseInt(wk[6].slice(5,7),10)-1];
+    var h='<div class="wk-nav"><button type="button" class="rdv-week-arrow" data-wprev aria-label="Semaine précédente">‹</button><span class="wk-label">'+label+'</span><button type="button" class="rdv-week-arrow" data-wnext aria-label="Semaine suivante">›</button></div><div class="wk-grid">';
+    wk.forEach(function(ds){ var slots=map[ds]||[]; h+='<div class="wk-col"><div class="wk-colh"><span>'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b></div>'+(slots.length?('<div class="wk-slots">'+slots.map(function(t){return cellHtml(ds,t);}).join('')+'</div>'):'<div class="rdv-none">—</div>')+'</div>'; });
+    return h+'</div>';
   }
-  function stepSlot(){ if(!S.viewMonth) S.viewMonth=curMonth(); if(!S.mode) S.mode='cal'; renderSlot(); }
+  function wireV2(){
+    var weeks=monthWeeks(S.viewMonth), pv=body.querySelector('[data-wprev]'), nx=body.querySelector('[data-wnext]');
+    if(pv) pv.onclick=function(){ if(S.weekIdx>0){ S.weekIdx--; renderSlot(); } else { var nm=monthShift(S.viewMonth,-1); if(nm>=curMonth()){ S.viewMonth=nm; S.weekIdx=99; renderSlot(); } } };
+    if(nx) nx.onclick=function(){ if(S.weekIdx<weeks.length-1){ S.weekIdx++; renderSlot(); } else { S.viewMonth=monthShift(S.viewMonth,1); S.weekIdx=0; renderSlot(); } };
+  }
+  function v3Html(map){
+    var dates=Object.keys(map).sort(); if(!dates.length) return emptyHtml();
+    if(!S.daySel || !map[S.daySel]) S.daySel=dates[0];
+    var pills=dates.map(function(ds){ return '<button type="button" class="d3-pill'+(ds===S.daySel?' on':'')+'" data-day="'+ds+'"><span>'+dowShort(ds)+'</span><b>'+dayNum(ds)+'</b><i>'+MOISAB[parseInt(ds.slice(5,7),10)-1]+'</i></button>'; }).join('');
+    return '<div class="d3-days">'+pills+'</div><div class="d3-slots" id="d3-slots"><div class="rdv-cal-date">'+frDate(S.daySel)+'</div>'+slotsGrouped(S.daySel,map[S.daySel])+'</div>';
+  }
+  function wireV3(map){
+    body.querySelectorAll('.d3-pill').forEach(function(b){ b.onclick=function(){ S.daySel=b.getAttribute('data-day'); var z=body.querySelector('#d3-slots'); z.innerHTML='<div class="rdv-cal-date">'+frDate(S.daySel)+'</div>'+slotsGrouped(S.daySel,map[S.daySel]||[]); wireCells(z); body.querySelectorAll('.d3-pill').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-day')===S.daySel); }); }; });
+    wireCells(body.querySelector('#d3-slots'));
+  }
+  function stepSlot(){ if(!S.viewMonth) S.viewMonth=curMonth(); if(!S.mode) S.mode='v1'; renderSlot(); }
   function renderSlot(){
     var head='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3>';
     body.innerHTML=head+navHtml()+'<p class="rdv-load">Recherche des disponibilités…</p>'; wireNav();
     fetch(LB_API+'/api/slots?duration='+S.duration+'&month='+S.viewMonth).then(function(r){return r.json();}).then(function(d){
       var map={}; (d.days||[]).forEach(function(x){ map[x.date]=x.slots; });
-      body.innerHTML=head+navHtml()+(S.mode==='cal'?calHtml(map):bandHtml(map)); wireNav();
-      if(S.mode==='cal') wireCal(map); else wireSegs(body);
+      var content = S.mode==='v2'?v2Html(map):(S.mode==='v3'?v3Html(map):v1Html(map));
+      body.innerHTML=head+navHtml()+content; wireNav();
+      if(S.mode==='v2'){ wireV2(); wireCells(body); } else if(S.mode==='v3'){ wireV3(map); } else { wireCells(body); }
     }).catch(function(){ body.innerHTML=head+navHtml()+'<p class="rdv-empty">Erreur de connexion. Réessayez plus tard.</p>'; wireNav(); });
   }
   function stepForm(){
