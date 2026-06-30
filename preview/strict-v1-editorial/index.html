@@ -660,7 +660,7 @@ image-slot{touch-action:auto;}
 <section class="lb-sec" style="padding:96px 0;background:#eef4ea;">
   <div style="max-width:1180px;margin:0 auto;padding:0 28px;">
     <p style="font-family:'Open Sans',sans-serif;text-transform:uppercase;letter-spacing:.22em;font-size:13px;font-weight:700;color:#5f7d5c;margin:0 0 24px;text-align:center;">Evènements et ateliers</p>
-    <div class="lb-2col lb-evt" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 18px 50px -28px rgba(43,58,38,.45);border:1px solid rgba(122,155,118,.2);">
+    <div id="lbe-evt-list"><div class="lb-2col lb-evt" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 18px 50px -28px rgba(43,58,38,.45);border:1px solid rgba(122,155,118,.2);">
       <div class="lb-cuei" style="position:relative;min-height:380px;height:100%;overflow:hidden;">
         <div id="lbe-cuei-track" class="lb-cuei-track" style="display:flex;height:100%;min-height:380px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
           <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-1.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
@@ -668,13 +668,14 @@ image-slot{touch-action:auto;}
           <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-3.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
           <div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="img/cueillette-4.jpg" fit="cover" placeholder="Balade cueillette" style="width:100%;height:100%;min-height:380px;"></image-slot></div>
         </div>
-        <div id="lbe-cuei-dots" style="position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:9px;z-index:2;"></div>
+        <div id="lbe-cuei-dots" class="lb-cuei-dots" style="position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:9px;z-index:2;"></div>
       </div>
       <div id="lbe-evt-text" style="padding:48px 50px;">
         <p style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:#5f7d5c;margin:0 0 8px;">Chaque année au 1<sup>er</sup> mai · secteur de Commercy (lieu variable)</p>
         <h3 style="font-family:'Playfair Display',Georgia,serif;color:#2b3a26;font-weight:600;font-size:clamp(26px,3vw,34px);margin:0 0 16px;line-height:1.15;">Balade cueillette de plantes médicinales</h3>
         <p style="font-size:19px;margin:0;">Chaque année au 1er mai venir découvrir lors d'une balade cueillette une dizaine de plantes médicinales et comestible. La matinée se termine par un moment de partage gourmand, avec la dégustation de préparations à base de plantes sauvages cueillies ensemble.</p>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -1017,12 +1018,12 @@ function lbMain(){
   });
 
   // === DIAPO Cueillette (Événements) : 1 image à la fois, points + swipe + auto-défilement ===
-  (function(){
-    var track = document.getElementById('lbe-cuei-track');
-    var dotsBox = document.getElementById('lbe-cuei-dots');
+  document.querySelectorAll('.lb-cuei-track').forEach(function(track){
+    var dotsBox = track.parentNode.querySelector('.lb-cuei-dots');
     if (!track || !dotsBox || !track.children.length) return;
     var nb = track.children.length;
     function cw(){ return track.getBoundingClientRect().width || 1; }
+    if (nb <= 1){ return; }
     for (var i = 0; i < nb; i++) {
       (function(i){
         var b = document.createElement('button'); b.type = 'button';
@@ -1050,7 +1051,7 @@ function lbMain(){
     });
     track.addEventListener('pointerdown', stop);
     upd(); start();
-  })();
+  });
 
   // === TÉMOIGNAGES (avis Google 5 étoiles) : carrousel points + swipe + auto-défilement ===
   (function(){
@@ -1317,19 +1318,27 @@ function lbHydrate(C){
     }
   }
 
-  // ---- Événements (1er événement -> carte existante) ----
+  // ---- Événements & ateliers (tous les événements -> une carte chacun) ----
   if (C.evenements && C.evenements.events && C.evenements.events.length){
-    var ev = C.evenements.events[0];
-    var track = document.getElementById('lbe-cuei-track');
-    if (track && ev.photos) track.innerHTML = ev.photos.map(function(p){
-      return '<div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="'+lbImg(p)+'" fit="cover" placeholder="Photo" style="width:100%;height:100%;min-height:380px;"></image-slot></div>';
-    }).join('');
-    var et = document.getElementById('lbe-evt-text');
-    if (et){
-      var meta = lbEsc(ev.when || '') + (ev.where ? ' · ' + lbEsc(ev.where) : '');
-      et.innerHTML = '<p style="font-family:\'Playfair Display\',Georgia,serif;font-style:italic;font-size:20px;color:#5f7d5c;margin:0 0 8px;">'+meta+'</p>'
-        + '<h3 style="font-family:\'Playfair Display\',Georgia,serif;color:#2b3a26;font-weight:600;font-size:clamp(26px,3vw,34px);margin:0 0 16px;line-height:1.15;">'+lbEsc(ev.title || '')+'</h3>'
-        + '<p style="font-size:19px;margin:0;white-space:pre-line;">'+lbEsc(ev.description || '')+'</p>';
+    var evList = document.getElementById('lbe-evt-list');
+    if (evList){
+      evList.innerHTML = C.evenements.events.map(function(ev, i){
+        var slides = (ev.photos && ev.photos.length ? ev.photos : ['']).map(function(p){
+          return '<div style="flex:0 0 100%;scroll-snap-align:start;height:100%;min-height:380px;"><image-slot src="'+lbImg(p)+'" fit="cover" placeholder="Photo" style="width:100%;height:100%;min-height:380px;"></image-slot></div>';
+        }).join('');
+        var meta = lbEsc(ev.when || '') + (ev.where ? ' · ' + lbEsc(ev.where) : '');
+        return '<div class="lb-2col lb-evt" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 18px 50px -28px rgba(43,58,38,.45);border:1px solid rgba(122,155,118,.2);'+(i?'margin-top:28px;':'')+'">'
+          + '<div class="lb-cuei" style="position:relative;min-height:380px;height:100%;overflow:hidden;">'
+          +   '<div class="lb-cuei-track" style="display:flex;height:100%;min-height:380px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;">'+slides+'</div>'
+          +   '<div class="lb-cuei-dots" style="position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:9px;z-index:2;"></div>'
+          + '</div>'
+          + '<div class="lbe-evt-text" style="padding:48px 50px;">'
+          +   (meta ? '<p style="font-family:\'Playfair Display\',Georgia,serif;font-style:italic;font-size:20px;color:#5f7d5c;margin:0 0 8px;">'+meta+'</p>' : '')
+          +   '<h3 style="font-family:\'Playfair Display\',Georgia,serif;color:#2b3a26;font-weight:600;font-size:clamp(26px,3vw,34px);margin:0 0 16px;line-height:1.15;">'+lbEsc(ev.title || '')+'</h3>'
+          +   '<p style="font-size:19px;margin:0;white-space:pre-line;">'+lbEsc(ev.description || '')+'</p>'
+          + '</div>'
+          + '</div>';
+      }).join('');
     }
   }
 
