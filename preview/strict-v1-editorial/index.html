@@ -795,6 +795,12 @@ image-slot{touch-action:auto;}
     .lb-faq summary::after{content:'+';font-size:26px;color:#5f7d5c;font-weight:400;line-height:1;flex:none;transition:transform .2s;}
     .lb-faq details[open] summary::after{transform:rotate(45deg);}
     .lb-faq-a{padding:0 24px 22px;font-size:16.5px;color:#4a5744;line-height:1.65;}
+    @media(max-width:560px){
+      #faq{padding:64px 0!important;}
+      .lb-faq summary{font-size:16px;padding:16px 18px;gap:12px;}
+      .lb-faq summary::after{font-size:23px;}
+      .lb-faq-a{padding:0 18px 18px;font-size:15.5px;}
+    }
   </style>
   <div style="max-width:860px;margin:0 auto;padding:0 28px;">
     <div style="text-align:center;margin-bottom:40px;">
@@ -812,7 +818,7 @@ image-slot{touch-action:auto;}
     </div>
   </div>
 </section>
-<script type="application/ld+json">
+<script type="application/ld+json" id="faq-schema">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -1443,6 +1449,24 @@ function lbHydrate(C){
           + '</div>'
           + '</div>';
       }).join('');
+    }
+  }
+
+  // ---- FAQ (accordéon + schema FAQPage) ----
+  if (C.faq && C.faq.items && C.faq.items.length){
+    var faqItems = C.faq.items.filter(function(it){ return it && (it.q || '').trim(); });
+    var faqWrap = document.querySelector('#faq .lb-faq');
+    if (faqWrap && faqItems.length){
+      faqWrap.innerHTML = faqItems.map(function(it){
+        return '<details><summary>'+lbEsc(it.q)+'</summary><div class="lb-faq-a">'+lbEsc(it.a||'').replace(/\n/g,'<br>')+'</div></details>';
+      }).join('');
+    }
+    var faqSchema = document.getElementById('faq-schema');
+    if (faqSchema && faqItems.length){
+      faqSchema.textContent = JSON.stringify({
+        '@context':'https://schema.org','@type':'FAQPage',
+        mainEntity: faqItems.map(function(it){ return {'@type':'Question','name':it.q,'acceptedAnswer':{'@type':'Answer','text':(it.a||'').replace(/\s+/g,' ').trim()}}; })
+      });
     }
   }
 
