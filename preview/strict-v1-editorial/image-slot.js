@@ -226,7 +226,7 @@
 
   class ImageSlot extends HTMLElement {
     static get observedAttributes() {
-      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'src', 'id'];
+      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'alt', 'src', 'id'];
     }
 
     constructor() {
@@ -622,6 +622,8 @@
           this._img.src = url;
           this._ghost.src = url;
         }
+        // Texte alternatif (SEO images + accessibilité) : attribut alt, sinon placeholder.
+        this._img.alt = this.getAttribute('alt') || this.getAttribute('placeholder') || '';
         this._img.style.display = 'block';
         this._empty.style.display = 'none';
         this.setAttribute('data-filled', '');
