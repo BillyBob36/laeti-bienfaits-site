@@ -226,7 +226,7 @@
 
   class ImageSlot extends HTMLElement {
     static get observedAttributes() {
-      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'alt', 'src', 'id'];
+      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'alt', 'loading', 'fetchpriority', 'src', 'id'];
     }
 
     constructor() {
@@ -618,6 +618,9 @@
       // Toggle via style.display — the [hidden] attribute alone loses to
       // the display:flex / display:block rules in the stylesheet above.
       if (url) {
+        // Perf (Core Web Vitals) : lazy par défaut ; hero explicitement eager+priority.
+        this._img.loading = this.getAttribute('loading') || 'lazy';
+        this._img.setAttribute('fetchpriority', this.getAttribute('fetchpriority') || 'auto');
         if (this._img.getAttribute('src') !== url) {
           this._img.src = url;
           this._ghost.src = url;
