@@ -589,7 +589,7 @@ image-slot{touch-action:auto;}
         </div>
       </article>
       <article class="lb-prac" style="position:relative;aspect-ratio:3/4;border-radius:18px;overflow:hidden;cursor:pointer;">
-        <image-slot id="lbe_prac3" src="img/massage-dos-1.jpg" fit="cover" placeholder="Soins corps et âme" style="position:absolute;inset:0;width:100%;height:100%;"></image-slot>
+        <image-slot id="lbe_prac3" src="img/bol-chantant-1.jpg" fit="cover" placeholder="Soins corps et âme" alt="Soin sonore aux bols chantants — soins corps et âme" style="position:absolute;inset:0;width:100%;height:100%;"></image-slot>
         <div class="lb-prac-ov" style="position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(30,42,27,0) 30%,rgba(30,42,27,.82) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;color:#fff;pointer-events:none;transition:background .3s;">
           <span style="font-family:'Playfair Display',Georgia,serif;font-style:italic;opacity:.85;font-size:17px;">03</span>
           <h3 style="font-family:'Playfair Display',Georgia,serif;color:#fff;font-size:23px;margin:4px 0 0;font-weight:600;">Soins corps et âme</h3>
@@ -1609,6 +1609,7 @@ function lbRdvWidget(){
       +'<div><label>Nom *</label><input id="rdv-last" type="text" autocomplete="family-name"></div></div>'
       +'<label>Téléphone *</label><input id="rdv-phone" type="tel" inputmode="tel" autocomplete="tel">'
       +'<label>Motif de la consultation</label><select id="rdv-presta" class="rdv-select">'+opts+'</select>'
+      +'<label>Dites-moi en plus *</label><textarea id="rdv-note" rows="3" placeholder="Résumez en quelques mots la raison de votre visite"></textarea>'
       +'<div class="rdv-err" id="rdv-err"></div>'
       +'<button class="rdv-submit" id="rdv-submit" type="button">Envoyer ma demande</button>'
       +'<button class="rdv-back" type="button">‹ Retour</button>';
@@ -1617,14 +1618,16 @@ function lbRdvWidget(){
   }
   function submit(){
     var first=body.querySelector('#rdv-first').value.trim(), last=body.querySelector('#rdv-last').value.trim(), phone=body.querySelector('#rdv-phone').value.trim();
+    var note=body.querySelector('#rdv-note').value.trim();
     var sel=body.querySelector('#rdv-presta'), presta=sel?sel.value:'', opt=sel?sel.options[sel.selectedIndex]:null;
     var pdur=opt?(parseInt(opt.getAttribute('data-dur'),10)||0):0;
     S.prestation=presta||''; if(pdur) S.duration=pdur;
     var name=(first+' '+last).trim();
     var err=body.querySelector('#rdv-err');
     if(first.length<2 || last.length<1 || phone.replace(/[^0-9]/g,'').length<9){ err.textContent="Merci d'indiquer vos prénom, nom et un numéro de téléphone valide."; return; }
+    if(note.length<3){ err.textContent="Merci de résumer en quelques mots la raison de votre visite."; return; }
     var btn=body.querySelector('#rdv-submit'); btn.disabled=true; btn.textContent='Envoi…';
-    fetch(LB_API+'/api/booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,firstname:first,lastname:last,phone:phone,motif:'',prestation:S.prestation,date:S.date,time:S.time,duration:S.duration})})
+    fetch(LB_API+'/api/booking',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,firstname:first,lastname:last,phone:phone,motif:note,prestation:S.prestation,date:S.date,time:S.time,duration:S.duration})})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(res){ if(!res.ok) throw new Error((res.j&&res.j.error)||'Une erreur est survenue.'); doneStep(); })
       .catch(function(e){ err.textContent=e.message; btn.disabled=false; btn.textContent='Envoyer ma demande'; });
