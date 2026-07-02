@@ -628,7 +628,7 @@ image-slot{touch-action:auto;}
         <ul style="list-style:none;margin:0;padding:0;position:relative;z-index:1;">
           <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;border-bottom:1px dashed rgba(255,255,255,.25);"><span style="font-weight:600;color:#fff;">Massage Signature Laeti'Bienfaits<span style="display:block;font-size:13.5px;font-weight:400;color:rgba(255,255,255,.7);margin-top:2px;">45 min – 1h00</span></span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#ffd9c2;white-space:nowrap;">60 €</span></li>
           <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;border-bottom:1px dashed rgba(255,255,255,.25);"><span style="font-weight:600;color:#fff;">Aromatouch Technique<span style="display:block;font-size:13.5px;font-weight:400;color:rgba(255,255,255,.7);margin-top:2px;">45 min</span></span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#ffd9c2;white-space:nowrap;">70 €</span></li>
-          <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;"><span style="font-weight:600;color:#fff;">Soin au Bol Chantant<span style="display:block;font-size:13.5px;font-weight:400;color:rgba(255,255,255,.7);margin-top:2px;">1h00</span></span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#ffd9c2;white-space:nowrap;">70 €</span></li>
+          <li style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;"><span style="font-weight:600;color:#fff;">Soin au Bol Chantant<span style="display:block;font-size:13.5px;font-weight:400;color:rgba(255,255,255,.7);margin-top:2px;">1h30</span></span><span style="font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:23px;color:#ffd9c2;white-space:nowrap;">70 €</span></li>
         </ul>
       </div>
       <div style="background:#f7f3ed;border:1px solid rgba(122,155,118,.25);border-radius:26px;padding:34px 30px;height:100%;position:relative;overflow:hidden;">
@@ -1249,7 +1249,7 @@ function lbMain(){
 <p>Manipulation intuitive, guidée par le toucher pour libérer les tensions et apaiser durablement les douleurs du dos, des jambes, du nerf sciatique ou des cervicales. J'allie magnétisme, travail sur les méridiens, huiles essentielles et Fleurs de Bach.</p>
 <h4>AromaTouch Technique<span class="tag">45 min · 70 €</span></h4>
 <p>Massage par effleurage doux avec 8 huiles essentielles ciblant les systèmes viscéral, neurologique et endocrinien, pour rétablir l'équilibre physique, mental et émotionnel. Recommandé en cas de fatigue chronique, burn-out, stress, migraines, ou pour renforcer le système immunitaire.</p>
-<h4>Soin au Bol Chantant<span class="tag">1h · 70 €</span></h4>
+<h4>Soin au Bol Chantant<span class="tag">1h30 · 70 €</span></h4>
 <p>Une parenthèse hors du temps, un véritable voyage vibratoire au cœur de vous-même. Les sons profonds et enveloppants des bols chantants se diffusent dans tout le corps, déliant les tensions physiques, apaisant les émotions et calmant le flot des pensées. Idéal en période de stress, de fatigue ou de transition de vie.</p>
 <button class="lb-modal-cta" type="button">Prendre rendez-vous</button>` },
     { eyebrow:'Pratique 04', title:'Soins détente, thérapeutique', body:
@@ -1598,7 +1598,7 @@ function lbRdvWidget(){
   }
   function stepForm(){
     var ps=prestations();
-    var opts='<option value="">— Je ne sais pas encore / autre —</option>';
+    var opts='<option value="" data-dur="90">— Je ne sais pas encore —</option>';
     ps.forEach(function(p){ opts+='<option value="'+lbEsc(p.name)+'" data-dur="'+(p.duration||0)+'">'+lbEsc(p.name)+(p.duration?' ('+p.duration+' min)':'')+'</option>'; });
     body.innerHTML='<p class="rdv-step">Étape 2 sur 2</p><h3 class="rdv-h">Vos coordonnées</h3>'
       +'<div class="rdv-recap">'+frDate(S.date)+' à '+S.time+'</div>'
