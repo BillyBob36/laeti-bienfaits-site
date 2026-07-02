@@ -200,6 +200,8 @@ image-slot{touch-action:auto;}
 .rdv-week-arrow:disabled{opacity:.32;cursor:default;}
 .rdv-week{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;}
 .rdv-week::-webkit-scrollbar{display:none;}
+.rdv-contactnote{text-align:center;font-size:13.5px;color:#6f7c69;margin:16px 4px 0;line-height:1.5;}
+.rdv-contactnote a{color:#c47a5b;font-weight:700;text-decoration:underline;}
 .rdv-col{flex:0 0 84px;scroll-snap-align:start;display:flex;flex-direction:column;gap:7px;}
 .rdv-col-hd{text-align:center;font-size:12px;color:#6f7c69;line-height:1.2;padding-bottom:7px;border-bottom:1px solid rgba(122,155,118,.22);}
 .rdv-dow{text-transform:capitalize;}
@@ -1587,10 +1589,11 @@ function lbRdvWidget(){
   function stepSlot(){ if(!S.viewMonth) S.viewMonth=curMonth(); renderSlot(); }
   function renderSlot(){
     var head='<p class="rdv-step">Étape 1 sur 2</p><h3 class="rdv-h">Choisissez un créneau</h3>';
+    var note='<p class="rdv-contactnote">Ces créneaux ne vous conviennent pas ? <a href="tel:+33673962183">Contactez-moi</a>, on s\'arrange.</p>';
     body.innerHTML=head+navHtml()+'<p class="rdv-load">Recherche des disponibilités…</p>'; wireNav();
     S.map={}; S.loadedThrough=S.viewMonth; S.loading=false;
     fetchMonth(S.viewMonth).then(function(){
-      body.innerHTML=head+navHtml()+'<div class="rdv-week" id="rdv-week">'+monthDays(S.viewMonth).map(colHtml).join('')+'</div>'; wireNav();
+      body.innerHTML=head+navHtml()+'<div class="rdv-week" id="rdv-week">'+monthDays(S.viewMonth).map(colHtml).join('')+'</div>'+note; wireNav();
       var track=body.querySelector('#rdv-week'); wireSegs(track);
       track.addEventListener('scroll', function(){ if(S._raf) return; S._raf=requestAnimationFrame(function(){ S._raf=null; syncMonthSelect(); maybeLoadMore(); }); });
       maybeLoadMore();
